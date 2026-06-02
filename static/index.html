@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金融市場儀表板</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft JhengHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+        header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+        header h1{font-size:1.3rem;letter-spacing:1px}
+        .update-info{font-size:.78rem;opacity:.7}
+        .container{max-width:1100px;margin:0 auto;padding:16px}
+        .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+        .card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-left:4px solid;transition:transform .2s}
+        .card:hover{transform:translateY(-2px)}
+        .card.usd{border-left-color:#2196F3}.card.eur{border-left-color:#FF5722}
+        .card.gold{border-left-color:#FFC107}.card.taiex{border-left-color:#00BCD4}
+        .card.etf{border-left-color:#4CAF50}.card.googl{border-left-color:#e040fb}
+        .card-label{font-size:.75rem;color:#999;margin-bottom:4px;font-weight:500}
+        .card-value{font-size:1.6rem;font-weight:700}
+        .card-change{font-size:.82rem;margin-top:4px;font-weight:600}
+        .card-change.up{color:#e53935}.card-change.down{color:#2e7d32}.card-change.flat{color:#888}
+        .card-sub{font-size:.7rem;color:#bbb;margin-top:3px}
+        .controls{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+        .btn{padding:7px 18px;border:2px solid #1a1a2e;background:#fff;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s}
+        .btn:hover{background:#eef}.btn.active{background:#1a1a2e;color:#fff}
+        .auto-tag{margin-left:auto;font-size:.75rem;color:#888}
+        .chart-section{background:#fff;border-radius:10px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:18px}
+        .chart-section h2{font-size:1rem;margin-bottom:12px;color:#555;font-weight:600}
+        .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+        .chart-item{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+        .chart-item h3{font-size:.88rem;margin-bottom:10px;color:#666;font-weight:600}
+        .loading-overlay{display:flex;flex-direction:column;align-items:center;padding:50px 20px;color:#888}
+        .spinner{width:32px;height:32px;border:3px solid #e0e0e0;border-top:3px solid #1a1a2e;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .error-banner{background:#fff3e0;border:1px solid #ffcc80;border-radius:8px;padding:12px 16px;margin-bottom:14px;color:#bf360c;font-size:.82rem;line-height:1.5}
+        .demo-badge{display:inline-block;background:#fff3e0;color:#e65100;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:6px}
+        .table-section{background:#fff;border-radius:10px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-top:18px;overflow-x:auto}
+        .table-section h2{font-size:1rem;margin-bottom:12px;color:#555;font-weight:600}
+        .data-table{width:100%;border-collapse:collapse;font-size:.8rem}
+        .data-table th{background:#f8f9fa;padding:8px 10px;text-align:right;font-weight:600;color:#555;border-bottom:2px solid #e0e0e0;white-space:nowrap}
+        .data-table th:first-child{text-align:left}
+        .data-table td{padding:7px 10px;text-align:right;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+        .data-table td:first-child{text-align:left;color:#888}
+        .data-table tr:hover{background:#fafbfc}
+        footer{text-align:center;padding:18px;color:#aaa;font-size:.72rem;line-height:1.6}
+        @media(max-width:600px){
+            .cards{grid-template-columns:repeat(2,1fr)}
+            .chart-grid{grid-template-columns:1fr}
+            .card-value{font-size:1.3rem}
+            header h1{font-size:1.1rem}
+            .container{padding:10px}
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <h1>📊 金融市場儀表板</h1>
+        <div class="update-info" id="updateTime">載入中...</div>
+    </div>
+</header>
+<div class="container">
+    <div id="errorArea"></div>
+    <div class="cards">
+        <div class="card usd">
+            <div class="card-label">美金 / 台幣</div>
+            <div class="card-value" id="price-usd">--</div>
+            <div class="card-change flat" id="change-usd">--</div>
+            <div class="card-sub" id="sub-usd"></div>
+        </div>
+        <div class="card eur">
+            <div class="card-label">歐元 / 台幣</div>
+            <div class="card-value" id="price-eur">--</div>
+            <div class="card-change flat" id="change-eur">--</div>
+            <div class="card-sub" id="sub-eur"></div>
+        </div>
+        <div class="card gold">
+            <div class="card-label">金價 (TWD/錢)</div>
+            <div class="card-value" id="price-gold">--</div>
+            <div class="card-change flat" id="change-gold">--</div>
+            <div class="card-sub" id="sub-gold"></div>
+        </div>
+        <div class="card taiex">
+            <div class="card-label">台股大盤 加權指數</div>
+            <div class="card-value" id="price-taiex">--</div>
+            <div class="card-change flat" id="change-taiex">--</div>
+            <div class="card-sub" id="sub-taiex"></div>
+        </div>
+        <div class="card etf">
+            <div class="card-label">006208 富邦台50</div>
+            <div class="card-value" id="price-006208">--</div>
+            <div class="card-change flat" id="change-006208">--</div>
+            <div class="card-sub" id="sub-006208"></div>
+        </div>
+        <div class="card googl">
+            <div class="card-label">GOOGL Alphabet</div>
+            <div class="card-value" id="price-googl">--</div>
+            <div class="card-change flat" id="change-googl">--</div>
+            <div class="card-sub" id="sub-googl"></div>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="btn active" onclick="switchPeriod('5d',this)">1 週</button>
+        <button class="btn" onclick="switchPeriod('1mo',this)">1 個月</button>
+        <button class="btn" onclick="switchPeriod('3mo',this)">3 個月</button>
+        <span class="auto-tag" id="autoTag">每 5 分鐘自動更新</span>
+    </div>
+    <div class="chart-section">
+        <h2>漲跌幅比較 (%)<span id="demoBadge" class="demo-badge" style="display:none">範例資料</span></h2>
+        <div id="comparisonLoading" class="loading-overlay">
+            <div class="spinner"></div>正在載入資料...
+        </div>
+        <canvas id="comparisonChart" style="display:none"></canvas>
+    </div>
+    <div class="chart-grid">
+        <div class="chart-item"><h3>美金 / 台幣</h3><canvas id="chart-usd"></canvas></div>
+        <div class="chart-item"><h3>歐元 / 台幣</h3><canvas id="chart-eur"></canvas></div>
+        <div class="chart-item"><h3>金價 (TWD/錢)</h3><canvas id="chart-gold"></canvas></div>
+        <div class="chart-item"><h3>台股大盤 加權指數</h3><canvas id="chart-taiex"></canvas></div>
+        <div class="chart-item"><h3>006208 富邦台50</h3><canvas id="chart-006208"></canvas></div>
+        <div class="chart-item"><h3>GOOGL Alphabet</h3><canvas id="chart-googl"></canvas></div>
+    </div>
+    <div class="table-section" id="tableSection" style="display:none">
+        <h2>歷史數據</h2>
+        <table class="data-table" id="dataTable">
+            <thead><tr>
+                <th>日期</th><th>USD/TWD</th><th>EUR/TWD</th><th>金價(錢)</th><th>大盤</th><th>006208</th><th>GOOGL</th>
+            </tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+<footer>
+    資料來源：Yahoo Finance｜資料可能延遲 15–20 分鐘｜僅供參考，不構成投資建議
+</footer>
+
+<script>
+function bootApp(){
+const ASSETS=[
+    {key:'usd',symbol:'USDTWD=X',label:'美金/台幣',color:'#2196F3',colorLight:'rgba(33,150,243,.08)',fmt:v=>v.toFixed(3)},
+    {key:'eur',symbol:'EURTWD=X',label:'歐元/台幣',color:'#FF5722',colorLight:'rgba(255,87,34,.08)',fmt:v=>v.toFixed(3)},
+    {key:'gold',symbol:'GC=F',label:'金價(TWD/錢)',color:'#FFC107',colorLight:'rgba(255,193,7,.08)',fmt:v=>Math.round(v).toLocaleString()},
+    {key:'taiex',symbol:'^TWII',label:'大盤',color:'#00BCD4',colorLight:'rgba(0,188,212,.08)',fmt:v=>v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    {key:'006208',symbol:'006208.TW',label:'006208',color:'#4CAF50',colorLight:'rgba(76,175,80,.08)',fmt:v=>v.toFixed(2)},
+    {key:'googl',symbol:'GOOGL',label:'GOOGL',color:'#e040fb',colorLight:'rgba(224,64,251,.08)',fmt:v=>v.toFixed(2)},
+];
+
+let currentRange='5d',allData={},compChart=null,indCharts={},isDemoMode=false,refreshTimer=null;
+
+async function tryFetch(url,ms){
+    const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);
+    try{const r=await fetch(url,{signal:c.signal});clearTimeout(t);if(!r.ok)throw new Error(r.status);return await r.text()}
+    catch(e){clearTimeout(t);throw e}
+}
+
+async function fetchData(symbol,range){
+    const url=`/api/yahoo?symbol=${encodeURIComponent(symbol)}&range=${range}`;
+    const text=await tryFetch(url,12000);
+    return JSON.parse(text);
+}
+
+function parseYahoo(json){
+    const r=json.chart.result[0],ts=r.timestamp||[],cl=r.indicators.quote[0].close||[],pts=[];
+    for(let i=0;i<ts.length;i++){
+        if(cl[i]==null)continue;
+        const d=new Date(ts[i]*1000);
+        pts.push({date:d,dateStr:`${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')}`,close:cl[i]});
+    }
+    return pts;
+}
+
+async function fetchAsset(asset,range){
+    const json=await fetchData(asset.symbol,range);
+    return parseYahoo(json);
+}
+
+async function loadAllData(range){
+    const errors=[];
+    await Promise.all(ASSETS.map(async a=>{
+        try{allData[a.key]=await fetchAsset(a,range)}
+        catch(e){errors.push(a.label);allData[a.key]=null}
+    }));
+    convertGold();
+    return errors;
+}
+
+function convertGold(){
+    const g=allData.gold,u=allData.usd;
+    if(!g||!u)return;
+    const m={};for(const p of u)m[p.dateStr]=p.close;
+    const last=u[u.length-1].close;
+    for(const p of g){const rate=m[p.dateStr]||last;p.close=(p.close/31.1035)*3.75*rate}
+}
+
+function showError(msg){document.getElementById('errorArea').innerHTML=msg?`<div class="error-banner">${msg}</div>`:''}
+function showLoading(s){document.getElementById('comparisonLoading').style.display=s?'flex':'none';document.getElementById('comparisonChart').style.display=s?'none':'block'}
+
+function updateCards(){
+    for(const a of ASSETS){
+        const pts=allData[a.key],pE=document.getElementById(`price-${a.key}`),cE=document.getElementById(`change-${a.key}`),sE=document.getElementById(`sub-${a.key}`);
+        if(!pts||!pts.length){pE.textContent='--';cE.textContent='無資料';cE.className='card-change flat';sE.textContent='';continue}
+        const last=pts[pts.length-1].close,first=pts[0].close,diff=last-first,pct=(diff/first)*100;
+        pE.textContent=a.fmt(last);
+        const arrow=diff>0?'▲':diff<0?'▼':'—',sign=diff>0?'+':'';
+        cE.textContent=`${arrow} ${sign}${pct.toFixed(2)}%（${sign}${a.fmt(Math.abs(diff))}）`;
+        cE.className='card-change '+(diff>0?'up':diff<0?'down':'flat');
+        sE.textContent=`${pts[0].dateStr} ~ ${pts[pts.length-1].dateStr}`;
+    }
+}
+
+function buildCompChart(){
+    const ctx=document.getElementById('comparisonChart').getContext('2d');
+    if(compChart)compChart.destroy();
+    const datasets=[];let labels=[],maxLen=0;
+    for(const a of ASSETS){const p=allData[a.key];if(!p||p.length<2)continue;if(p.length>maxLen){maxLen=p.length;labels=p.map(x=>x.dateStr)}}
+    for(const a of ASSETS){const p=allData[a.key];if(!p||p.length<2)continue;const b=p[0].close;
+        datasets.push({label:a.label,data:p.map(x=>(((x.close-b)/b)*100).toFixed(2)),borderColor:a.color,backgroundColor:a.colorLight,borderWidth:2.5,pointRadius:p.length>30?0:3,pointHoverRadius:5,tension:.3,fill:false})}
+    compChart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,interaction:{mode:'index',intersect:false},
+        plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y>0?'+':''}${c.parsed.y}%`}},legend:{position:'top',labels:{usePointStyle:true,padding:14,font:{size:11}}}},
+        scales:{y:{ticks:{callback:v=>(v>0?'+':'')+parseFloat(v.toFixed(2))+'%'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+}
+
+function buildIndCharts(){
+    for(const a of ASSETS){
+        const cv=document.getElementById(`chart-${a.key}`),ctx=cv.getContext('2d');
+        if(indCharts[a.key])indCharts[a.key].destroy();
+        const pts=allData[a.key];
+        if(!pts||pts.length<2){indCharts[a.key]=new Chart(ctx,{type:'line',data:{labels:['無資料'],datasets:[]},options:{responsive:true}});continue}
+        indCharts[a.key]=new Chart(ctx,{type:'line',data:{labels:pts.map(p=>p.dateStr),datasets:[{label:a.label,data:pts.map(p=>p.close),borderColor:a.color,backgroundColor:a.colorLight,borderWidth:2,pointRadius:pts.length>30?0:2.5,pointHoverRadius:5,tension:.3,fill:true}]},
+            options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${a.label}: ${a.fmt(c.parsed.y)}`}}},
+                scales:{y:{ticks:{callback:v=>a.fmt(v)},grid:{color:'#f5f5f5'}},x:{grid:{display:false}}}}});
+    }
+}
+
+function buildTable(){
+    const sec=document.getElementById('tableSection'),tb=document.getElementById('tableBody');tb.innerHTML='';
+    let maxLen=0,dateLabels=[];
+    for(const a of ASSETS){const p=allData[a.key];if(p&&p.length>maxLen){maxLen=p.length;dateLabels=p.map(x=>x.dateStr)}}
+    if(!maxLen){sec.style.display='none';return}
+    const byDate={};
+    for(const a of ASSETS){const p=allData[a.key];if(!p)continue;for(const x of p){if(!byDate[x.dateStr])byDate[x.dateStr]={};byDate[x.dateStr][a.key]=a.fmt(x.close)}}
+    for(const dt of dateLabels.reverse().slice(0,30)){
+        const row=byDate[dt]||{},tr=document.createElement('tr');
+        tr.innerHTML=`<td>${dt}</td>`+ASSETS.map(a=>`<td>${row[a.key]||'--'}</td>`).join('');
+        tb.appendChild(tr)}
+    sec.style.display='block';
+}
+
+function renderAll(){
+    updateCards();buildCompChart();buildIndCharts();buildTable();showLoading(false);
+    document.getElementById('demoBadge').style.display=isDemoMode?'inline':'none';
+    document.getElementById('updateTime').textContent=(isDemoMode?'⚠ 範例資料 — ':'')+'最後更新：'+new Date().toLocaleString('zh-TW');
+}
+
+window.switchPeriod=async function(range,btn){
+    currentRange=range;
+    document.querySelectorAll('.controls .btn').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');
+    showLoading(true);showError('');
+    const errors=await loadAllData(range);
+    if(errors.length===ASSETS.length){showError('無法載入即時資料，請稍後再試。');showLoading(false);return}
+    if(errors.length>0)showError(`部分資產載入失敗：${errors.join('、')}。`);
+    isDemoMode=false;renderAll();
+};
+
+// Auto-refresh every 5 minutes
+function startAutoRefresh(){
+    if(refreshTimer)clearInterval(refreshTimer);
+    refreshTimer=setInterval(()=>{
+        const btn=document.querySelector('.controls .btn.active');
+        window.switchPeriod(currentRange,btn);
+    },5*60*1000);
+}
+
+// Init
+(async()=>{
+    showLoading(true);
+    const errors=await loadAllData(currentRange);
+    if(errors.length===ASSETS.length){
+        showError('無法載入即時資料，請稍後再試或重新整理頁面。');showLoading(false);return}
+    if(errors.length>0)showError(`部分資產載入失敗：${errors.join('、')}。`);
+    isDemoMode=false;renderAll();startAutoRefresh();
+})();
+} // end bootApp
+
+(function(){
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
+    s.onload=function(){bootApp()};
+    s.onerror=function(){document.getElementById('comparisonLoading').innerHTML='<p style="color:#e65100">Chart.js 載入失敗，請重新整理。</p>'};
+    document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
