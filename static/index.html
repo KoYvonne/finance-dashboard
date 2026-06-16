@@ -93,6 +93,37 @@
         .file-text-preview::-webkit-scrollbar{width:5px}
         .file-text-preview::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
         .irb-coming-soon{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:18px 22px;margin-top:18px;text-align:center;color:#bf360c;font-size:.86rem;line-height:1.6}
+        .irb-generate-area{text-align:center;margin-top:20px}
+        .irb-generate-btn{padding:12px 40px;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:none}
+        .irb-generate-btn.visible{display:inline-block}
+        .irb-generate-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,71,161,.35)}
+        .irb-step3{display:none;margin-top:10px}
+        .form060-header{text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:3px double #1a1a2e}
+        .form060-header h2{font-size:1.15rem;color:#1a1a2e;margin-bottom:4px}
+        .form060-header .form060-subtitle{font-size:.78rem;color:#888}
+        .form060-section{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border-left:4px solid #1565c0}
+        .form060-section.boilerplate{border-left-color:#4caf50}
+        .form060-section-title{font-size:.88rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+        .form060-section-title .q-num{background:#e3f2fd;color:#1565c0;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:4px}
+        .form060-section-title .q-num.green{background:#e8f5e9;color:#2e7d32}
+        .form060-section-hint{font-size:.74rem;color:#999;margin-bottom:10px}
+        .form060-field{width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px 12px;font-size:.84rem;font-family:inherit;line-height:1.6;resize:vertical;transition:border-color .2s;color:#333;background:#fafbfc}
+        .form060-field:focus{outline:none;border-color:#1565c0;background:#fff}
+        .form060-field.short{max-width:300px}
+        .form060-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+        .form060-label{font-size:.78rem;font-weight:600;color:#555;margin-bottom:4px}
+        .form060-group{margin-bottom:10px}
+        .form060-ref-panel{background:#f0f5ff;border:1px solid #bbdefb;border-radius:10px;padding:16px;margin-bottom:18px}
+        .form060-ref-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:.86rem;font-weight:600;color:#1565c0}
+        .form060-ref-content{max-height:200px;overflow-y:auto;margin-top:10px;font-size:.78rem;color:#555;line-height:1.7;white-space:pre-wrap;word-break:break-word;display:none}
+        .form060-ref-content.open{display:block}
+        .form060-actions{text-align:center;margin-top:24px;padding-top:18px;border-top:2px solid #e0e0e0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        .form060-export-btn{padding:12px 36px;background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;border:none;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
+        .form060-export-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(27,94,32,.35)}
+        .form060-export-btn:disabled{opacity:.4;pointer-events:none}
+        .form060-back-btn{padding:12px 36px;background:#fff;color:#555;border:2px solid #ccc;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
+        .form060-back-btn:hover{border-color:#999;color:#333}
+        .form060-autofill-tag{display:inline-block;font-size:.66rem;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:600}
         footer{text-align:center;padding:18px;color:#aaa;font-size:.72rem;line-height:1.6}
         @media(max-width:600px){
             .cards{grid-template-columns:repeat(2,1fr)}
@@ -101,6 +132,7 @@
             header h1{font-size:1.1rem}
             .container{padding:10px}
             .tab-btn{padding:8px 18px;font-size:.84rem}
+            .form060-row{grid-template-columns:1fr}
         }
     </style>
 </head>
@@ -260,8 +292,180 @@
             </div>
             <div class="file-text-preview" id="fileTextPreview">讀取中...</div>
         </div>
-        <div class="irb-coming-soon">
-            🚧 欄位對應與匯出功能開發中 — 待確認格式後會加入自動對應與 Word 匯出功能
+        <div class="irb-generate-area">
+            <button class="irb-generate-btn" id="irbGenerateBtn" onclick="goIRBStep3()">產生 IRB 表單 →</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Form060 表單 -->
+    <div id="irb-step3" class="irb-step3">
+        <span class="irb-back-link" onclick="backToStep2()">← 返回上傳企畫書</span>
+        <div class="form060-header">
+            <div class="irb-badge">TMU-JIRB Form060</div>
+            <h2>人體試驗研究申請書</h2>
+            <div class="form060-subtitle">研究類型：<strong id="form060-type-label">--</strong></div>
+        </div>
+
+        <!-- 企畫書原文參考 -->
+        <div class="form060-ref-panel">
+            <div class="form060-ref-toggle" onclick="toggleRefPanel()">
+                📄 企畫書原文參考 <span id="refToggleIcon">▼</span>
+            </div>
+            <div class="form060-ref-content" id="refContent"></div>
+        </div>
+
+        <!-- 計畫基本資料 -->
+        <div class="form060-section">
+            <div class="form060-section-title">計畫基本資料</div>
+            <div class="form060-group">
+                <div class="form060-label">計畫名稱（中文）</div>
+                <input type="text" class="form060-field" id="f060-title-zh" placeholder="例：深度學習於居家心電圖之智慧監測與分析系統">
+            </div>
+            <div class="form060-group">
+                <div class="form060-label">計畫名稱（英文）</div>
+                <input type="text" class="form060-field" id="f060-title-en" placeholder="例：Deep Learning for Smart Monitoring of Home ECG">
+            </div>
+        </div>
+
+        <!-- 主持人資訊 -->
+        <div class="form060-section">
+            <div class="form060-section-title">計畫主持人</div>
+            <div class="form060-row">
+                <div class="form060-group">
+                    <div class="form060-label">中文姓名</div>
+                    <input type="text" class="form060-field short" id="f060-pi-name" placeholder="例：王大明">
+                </div>
+                <div class="form060-group">
+                    <div class="form060-label">英文姓名</div>
+                    <input type="text" class="form060-field short" id="f060-pi-name-en" placeholder="例：Da-Ming, Wang">
+                </div>
+            </div>
+            <div class="form060-row">
+                <div class="form060-group">
+                    <div class="form060-label">服務單位/科別</div>
+                    <input type="text" class="form060-field short" id="f060-pi-dept" placeholder="例：臺北醫學大學 資訊醫學研究所">
+                </div>
+                <div class="form060-group">
+                    <div class="form060-label">職稱</div>
+                    <input type="text" class="form060-field short" id="f060-pi-title" placeholder="例：教授/主治醫師">
+                </div>
+            </div>
+            <div class="form060-row">
+                <div class="form060-group">
+                    <div class="form060-label">聯絡電話</div>
+                    <input type="text" class="form060-field short" id="f060-pi-phone" placeholder="例：02-27372181">
+                </div>
+                <div class="form060-group">
+                    <div class="form060-label">電子信箱</div>
+                    <input type="text" class="form060-field short" id="f060-pi-email" placeholder="例：name@tmu.edu.tw">
+                </div>
+            </div>
+        </div>
+
+        <!-- Q1: 研究背景 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q1</span> 研究計畫簡介</div>
+            <div class="form060-section-hint">請簡述研究背景、目的與重要性</div>
+            <textarea class="form060-field" id="f060-q1" rows="6" placeholder="從企畫書中擷取研究背景..."></textarea>
+        </div>
+
+        <!-- Q2: 研究摘要 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q2</span> 研究計畫摘要</div>
+            <div class="form060-section-hint">簡述研究方法、預期成果</div>
+            <textarea class="form060-field" id="f060-q2" rows="4" placeholder="從企畫書中擷取摘要..."></textarea>
+        </div>
+
+        <!-- Q3: 執行時間 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q3</span> 預定執行時間</div>
+            <div class="form060-row">
+                <div class="form060-group">
+                    <div class="form060-label">起始日期</div>
+                    <input type="text" class="form060-field short" id="f060-q3-start" placeholder="例：自審查通過日起">
+                </div>
+                <div class="form060-group">
+                    <div class="form060-label">結束日期</div>
+                    <input type="text" class="form060-field short" id="f060-q3-end" placeholder="例：2027-01-01">
+                </div>
+            </div>
+        </div>
+
+        <!-- Q12: 計畫類型 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q12</span> 計畫分類<span class="form060-autofill-tag">自動帶入</span></div>
+            <input type="text" class="form060-field short" id="f060-q12" readonly style="background:#e8f5e9;font-weight:600">
+        </div>
+
+        <!-- Q18: 執行地點 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q18</span> 計畫執行地點</div>
+            <input type="text" class="form060-field" id="f060-q18" placeholder="例：臺北醫學大學 資訊研究所">
+        </div>
+
+        <!-- Q27: 研究方法 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q27</span> 研究方法</div>
+            <div class="form060-section-hint">詳述研究設計、資料收集與分析方法</div>
+            <textarea class="form060-field" id="f060-q27" rows="6" placeholder="從企畫書中擷取研究方法..."></textarea>
+        </div>
+
+        <!-- Q28: 研究領域 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q28</span> 研究領域</div>
+            <input type="text" class="form060-field" id="f060-q28" placeholder="例：Cardiology, General Medicine">
+        </div>
+
+        <!-- Q29: 受試者資訊 -->
+        <div class="form060-section">
+            <div class="form060-section-title"><span class="q-num">Q29</span> 受試者(合作對象)資訊</div>
+            <div class="form060-group">
+                <div class="form060-label">Q29(1) 預定收案人數</div>
+                <input type="text" class="form060-field short" id="f060-q29-n" placeholder="例：500 人">
+            </div>
+            <div class="form060-row">
+                <div class="form060-group">
+                    <div class="form060-label">Q29(2) 年齡範圍 — 最小</div>
+                    <input type="text" class="form060-field short" id="f060-q29-age-min" placeholder="例：18">
+                </div>
+                <div class="form060-group">
+                    <div class="form060-label">Q29(2) 年齡範圍 — 最大</div>
+                    <input type="text" class="form060-field short" id="f060-q29-age-max" placeholder="例：100">
+                </div>
+            </div>
+            <div class="form060-group">
+                <div class="form060-label">Q29(3) 納入條件 (Inclusion Criteria)</div>
+                <textarea class="form060-field" id="f060-q29-inc" rows="3" placeholder="從企畫書中擷取納入條件..."></textarea>
+            </div>
+            <div class="form060-group">
+                <div class="form060-label">Q29(3) 排除條件 (Exclusion Criteria)</div>
+                <textarea class="form060-field" id="f060-q29-exc" rows="3" placeholder="從企畫書中擷取排除條件..."></textarea>
+            </div>
+        </div>
+
+        <!-- Q30: 資料隱私保護 (Boilerplate) -->
+        <div class="form060-section boilerplate">
+            <div class="form060-section-title"><span class="q-num green">Q30</span> 受試者資料隱私之保護措施<span class="form060-autofill-tag">範本自動帶入</span></div>
+            <div class="form060-section-hint">以下為北醫大標準範本，可依需求修改</div>
+            <textarea class="form060-field" id="f060-q30" rows="10"></textarea>
+        </div>
+
+        <!-- Q31: 知情同意 -->
+        <div class="form060-section boilerplate">
+            <div class="form060-section-title"><span class="q-num green">Q31</span> 受試者知情同意<span class="form060-autofill-tag">範本自動帶入</span></div>
+            <textarea class="form060-field" id="f060-q31" rows="4"></textarea>
+        </div>
+
+        <!-- Q32: 同意書 -->
+        <div class="form060-section boilerplate">
+            <div class="form060-section-title"><span class="q-num green">Q32</span> 知情同意書<span class="form060-autofill-tag">範本自動帶入</span></div>
+            <textarea class="form060-field" id="f060-q32" rows="4"></textarea>
+        </div>
+
+        <!-- 操作按鈕 -->
+        <div class="form060-actions">
+            <button class="form060-back-btn" onclick="backToStep2()">← 返回修改</button>
+            <button class="form060-export-btn" onclick="exportIRB()">匯出 IRB 申請書</button>
         </div>
     </div>
 </div>
@@ -345,6 +549,11 @@ function showExtractedText(text) {
     var preview = document.getElementById('fileTextPreview');
     if (!text || !text.trim()) { preview.textContent = '（未偵測到文字內容）'; return; }
     preview.textContent = text.length > 3000 ? text.substring(0, 3000) + '\n\n... 以上為前 3000 字預覽' : text;
+    document.getElementById('irbGenerateBtn').classList.add('visible');
+}
+
+function showGenerateBtn() {
+    document.getElementById('irbGenerateBtn').classList.add('visible');
 }
 
 function uploadFileToServer(file) {
@@ -363,6 +572,7 @@ function uploadFileToServer(file) {
                     '<div style="font-weight:600;margin-bottom:4px">' + data.note + '</div>' +
                     (data.pages ? '<div style="font-size:.78rem;color:#999">共 ' + data.pages + ' 頁</div>' : '') +
                     '</div>';
+                showGenerateBtn();
             } else {
                 showExtractedText(data.text);
             }
@@ -377,6 +587,7 @@ function removeFile() {
     document.getElementById('filePreview').style.display = 'none';
     document.getElementById('uploadZone').style.display = 'block';
     document.getElementById('fileInput').value = '';
+    document.getElementById('irbGenerateBtn').classList.remove('visible');
 }
 window.removeFile = removeFile;
 
@@ -385,6 +596,83 @@ function formatFileSize(bytes) {
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / 1048576).toFixed(1) + ' MB';
 }
+
+// ── Step 3: Form060 表單 ──
+var Q12_MAP = {
+    retrospective: '觀察性研究 — 病歷回溯（回顧性調閱醫療紀錄）',
+    database: '觀察性研究 — 資料庫研究',
+    survey: '觀察性研究 — 單純問卷研究',
+    biobank: '觀察性研究 — 生物資料庫檢體研究'
+};
+
+var Q30_BOILERPLATE =
+    '1. 所有可能辨識受試者身份之資料及隱私資料的儲存、管理、使用。參與試驗研究之計畫主持人，及受試者之直接之隸屬關係或相關管理人之間。\n' +
+    '2. 保存試驗研究之所有檔案儲存於上鎖之空間，進入資料儲存之地點或裝置通過時需輸入密碼（例如帳號或密碼），保存之所有資訊皆為加密。\n' +
+    '3. 以編碼(coding)方式代替可能辨識受試者身份之資料，並由計畫主持人保存編碼對照表。\n' +
+    '4. 主持人會依據HIPAA規範隱私去除18項特徵辨識進行去辨識化，受試者資料中之可能辨識受試者之資料將從受試者資料中移除之，並以加密保儲存，以編碼代替受試者資訊。\n' +
+    '5. 所有試驗研究之電子檔案由計畫主持人加密或設定權限控制；儲存裝置之電腦及其他儲感應裝置之資料皆在防火牆之保護之內。\n' +
+    '6. 由計畫主持人設定查閱受試者電子病歷檔案資料的使用人權限。\n' +
+    '7. 所有研究資料均保存於計畫主持人之電腦中，使用時，電腦裝置設置於計畫主持人之研究室中，且僅有計畫主持人透過帳號密碼登入資料。\n' +
+    '8. 研究結束後，所有資料保存3年。所有資料於保存年限到期後，由計畫主持人將原始資料之所有可辨識格式刪除之，所有電子資料一律由電子儲存介質格式刪除之。\n' +
+    '9. 未來使用匿名化之研究資料將由計畫主持人自行判斷，該資料必以去個人化的方式才能對外使用，且僅保留該資料與研究目的相關之儲存。除此之外，若有人反對或不同意，一切將遵從臺北醫學大學暨附屬醫院聯合人體研究倫理委員會、審議會與相關法規、倫理法律相關之規範。';
+
+var Q31_BOILERPLATE = {
+    retrospective: '確認告知受試者可拒絕參與，或可以隨時撤回同意而不影響其權益或所接受之醫療照護。\n不需告知受試者與其無利害關係或從屬關係之第三人取得其知情同意。\n其他：本研究主要是回顧性資料分析，並不會影響受試者的臨床治療或權益。',
+    database: '確認告知受試者可拒絕參與，或可以隨時撤回同意而不影響其權益或所接受之醫療照護。\n不需告知受試者與其無利害關係或從屬關係之第三人取得其知情同意。\n其他：本研究主要使用資料庫之去識別化資料進行分析，並不會影響受試者的臨床治療或權益。',
+    survey: '以書面取得受試者同意書進行簽署。',
+    biobank: '確認告知受試者可拒絕參與，或可以隨時撤回同意而不影響其權益或所接受之醫療審查。\n其他：本研究使用生物資料庫之檢體進行分析。'
+};
+
+var Q32_BOILERPLATE = {
+    retrospective: '申請免除知情同意：\n(1) 研究對受試者之風險屬於最小風險。\n(2) 免除（或變更）知情同意不會不利影響受試者的權利和福祉。\n(3) 若不免除知情同意，則無法執行本研究。本研究主要是回顧性資料分析，需要使用大量心電圖檢查資料進行人工智慧模型建模，且不會影響受試者的臨床治療權益。\n(4) 受試者於研究結束後將不會得到額外的相關資訊。',
+    database: '申請免除知情同意：\n(1) 研究對受試者之風險屬於最小風險。\n(2) 免除（或變更）知情同意不會不利影響受試者的權利和福祉。\n(3) 若不免除知情同意，則無法執行本研究。本研究使用資料庫之去識別化資料進行分析。\n(4) 受試者於研究結束後將不會得到額外的相關資訊。',
+    survey: '以書面取得受試者同意書。同意參與本研究之受試者都將被告知簽署同意書意義。',
+    biobank: '依生物資料庫管理條例相關規定辦理。'
+};
+
+function goIRBStep3() {
+    document.getElementById('irb-step2').style.display = 'none';
+    document.getElementById('irb-step3').style.display = 'block';
+    populateForm060();
+    window.scrollTo(0, 0);
+}
+window.goIRBStep3 = goIRBStep3;
+
+function backToStep2() {
+    document.getElementById('irb-step3').style.display = 'none';
+    document.getElementById('irb-step2').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+window.backToStep2 = backToStep2;
+
+function toggleRefPanel() {
+    var content = document.getElementById('refContent');
+    var icon = document.getElementById('refToggleIcon');
+    content.classList.toggle('open');
+    icon.textContent = content.classList.contains('open') ? '▲' : '▼';
+}
+window.toggleRefPanel = toggleRefPanel;
+
+function populateForm060() {
+    var t = selectedIRBType || 'retrospective';
+    document.getElementById('form060-type-label').textContent = IRB_LABELS[t];
+    document.getElementById('f060-q12').value = Q12_MAP[t] || '';
+    document.getElementById('f060-q30').value = Q30_BOILERPLATE;
+    document.getElementById('f060-q31').value = Q31_BOILERPLATE[t] || '';
+    document.getElementById('f060-q32').value = Q32_BOILERPLATE[t] || '';
+
+    var ref = document.getElementById('refContent');
+    if (uploadedFileText && uploadedFileText.trim()) {
+        ref.textContent = uploadedFileText;
+    } else {
+        ref.textContent = '（企畫書文字預覽不可用，請參考原始檔案）';
+    }
+}
+
+function exportIRB() {
+    alert('匯出功能開發中！完成後將可匯出為 Word (.docx) 格式。');
+}
+window.exportIRB = exportIRB;
 
 document.addEventListener('DOMContentLoaded', initUploadZone);
 
