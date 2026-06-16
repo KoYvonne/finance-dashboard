@@ -369,17 +369,15 @@ function readDocx(file) {
 }
 
 function readPdf(file) {
+    if (window.pdfjsLib) { extractPdfText(file); return; }
     var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs';
-    s.type = 'module';
-    s.onload = function() { extractPdfText(file); };
-    s.onerror = function() {
-        var s2 = document.createElement('script');
-        s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-        s2.onload = function() { extractPdfText(file); };
-        s2.onerror = function() { document.getElementById('fileTextPreview').textContent = 'PDF 解析工具載入失敗，請檢查網路連線'; };
-        document.head.appendChild(s2);
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = function() {
+        var pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        extractPdfText(file);
     };
+    s.onerror = function() { document.getElementById('fileTextPreview').textContent = 'PDF 解析工具載入失敗，請檢查網路連線'; };
     document.head.appendChild(s);
 }
 
@@ -388,21 +386,21 @@ function extractPdfText(file) {
     reader.onload = function(e) {
         var pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
         if (!pdfjsLib) { document.getElementById('fileTextPreview').textContent = 'PDF 解析工具載入失敗'; return; }
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         pdfjsLib.getDocument({ data: new Uint8Array(e.target.result) }).promise.then(function(pdf) {
-            var texts = [], loaded = 0;
-            for (var i = 1; i <= pdf.numPages; i++) {
+            var texts = [], loaded = 0, total = pdf.numPages;
+            if (total === 0) { showExtractedText('（PDF 無內容）'); return; }
+            for (var i = 1; i <= total; i++) {
                 (function(pageNum) {
                     pdf.getPage(pageNum).then(function(page) {
                         page.getTextContent().then(function(content) {
-                            texts[pageNum - 1] = content.items.map(function(item) { return item.str; }).join(' ');
+                            texts[pageNum - 1] = content.items.map(function(item) { return item.str; }).join('');
                             loaded++;
-                            if (loaded === pdf.numPages) showExtractedText(texts.join('\n'));
+                            if (loaded === total) showExtractedText(texts.join('\n'));
                         });
                     });
                 })(i);
             }
-        }).catch(function() { document.getElementById('fileTextPreview').textContent = 'PDF 檔案讀取失敗，請確認檔案格式正確'; });
+        }).catch(function(err) { document.getElementById('fileTextPreview').textContent = 'PDF 檔案讀取失敗：' + (err.message || '請確認檔案格式正確'); });
     };
     reader.readAsArrayBuffer(file);
 }
