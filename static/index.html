@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>金融市場儀表板</title>
+    <title>柯柯的小秘密</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft JhengHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
-        header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+        header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;padding:18px 20px 0;display:flex;flex-direction:column;gap:6px}
+        .header-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
         header h1{font-size:1.3rem;letter-spacing:1px}
         .update-info{font-size:.78rem;opacity:.7}
+        .tab-bar{display:flex;gap:0;margin-top:14px}
+        .tab-btn{padding:10px 28px;font-size:.92rem;font-weight:600;color:rgba(255,255,255,.55);background:transparent;border:none;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.5px}
+        .tab-btn:hover{color:rgba(255,255,255,.85)}
+        .tab-btn.active{color:#fff;border-bottom-color:#4fc3f7}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
         .container{max-width:1100px;margin:0 auto;padding:16px}
         .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
         .card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.06);border-left:4px solid;transition:transform .2s}
@@ -45,6 +52,47 @@
         .data-table td{padding:7px 10px;text-align:right;border-bottom:1px solid #f0f0f0;white-space:nowrap}
         .data-table td:first-child{text-align:left;color:#888}
         .data-table tr:hover{background:#fafbfc}
+        .irb-header{text-align:center;margin-bottom:28px}
+        .irb-header h2{font-size:1.3rem;color:#1a1a2e;font-weight:700;margin-bottom:6px}
+        .irb-header p{font-size:.88rem;color:#888;line-height:1.6}
+        .irb-badge{display:inline-block;background:#e3f2fd;color:#1565c0;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:12px;margin-bottom:12px}
+        .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px}
+        .type-card{background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:2px solid transparent;cursor:pointer;transition:all .25s;text-align:center;position:relative}
+        .type-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1);border-color:#90caf9}
+        .type-card.selected{border-color:#1565c0;background:#f5f9ff}
+        .type-card .type-icon{font-size:2.2rem;margin-bottom:12px}
+        .type-card .type-name{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+        .type-card .type-desc{font-size:.78rem;color:#888;line-height:1.5}
+        .type-card .type-check{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:#1565c0;color:#fff;font-size:.8rem;display:none;align-items:center;justify-content:center}
+        .type-card.selected .type-check{display:flex}
+        .irb-next-area{text-align:center;margin-top:20px}
+        .irb-next-btn{padding:12px 40px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;opacity:.4;pointer-events:none}
+        .irb-next-btn.enabled{opacity:1;pointer-events:auto}
+        .irb-next-btn.enabled:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(15,52,96,.35)}
+        .irb-step2{display:none;margin-top:10px}
+        .irb-step2 h3{font-size:1.05rem;color:#1a1a2e;font-weight:700;margin-bottom:6px}
+        .irb-step2 p{font-size:.84rem;color:#888;margin-bottom:16px;line-height:1.5}
+        .irb-back-link{display:inline-block;margin-bottom:16px;color:#1565c0;font-size:.84rem;cursor:pointer;font-weight:500}
+        .irb-back-link:hover{text-decoration:underline}
+        .upload-zone{border:2px dashed #c0c8d4;border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .25s;background:#fafbfc;position:relative}
+        .upload-zone:hover{border-color:#1565c0;background:#f0f5ff}
+        .upload-zone.dragover{border-color:#1565c0;background:#e8f0fe;transform:scale(1.01)}
+        .upload-zone .upload-icon{font-size:2.8rem;margin-bottom:12px;opacity:.6}
+        .upload-zone .upload-title{font-size:1rem;font-weight:600;color:#333;margin-bottom:6px}
+        .upload-zone .upload-hint{font-size:.8rem;color:#999;line-height:1.5}
+        .upload-zone .upload-formats{display:inline-block;margin-top:10px;font-size:.72rem;color:#aaa;background:#f0f0f0;padding:4px 12px;border-radius:20px}
+        .upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+        .file-preview{display:none;background:#fff;border:2px solid #e0e8f0;border-radius:12px;padding:20px;margin-top:0}
+        .file-info{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+        .file-info .file-icon{font-size:2rem}
+        .file-info .file-name{font-size:.92rem;font-weight:600;color:#1a1a2e}
+        .file-info .file-size{font-size:.76rem;color:#999}
+        .file-info .file-remove{margin-left:auto;background:none;border:1px solid #e0e0e0;border-radius:6px;padding:5px 12px;font-size:.78rem;color:#888;cursor:pointer;transition:all .2s}
+        .file-info .file-remove:hover{border-color:#e53935;color:#e53935;background:#fef2f2}
+        .file-text-preview{max-height:200px;overflow-y:auto;background:#f8f9fa;border-radius:8px;padding:14px;font-size:.8rem;color:#555;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+        .file-text-preview::-webkit-scrollbar{width:5px}
+        .file-text-preview::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
+        .irb-coming-soon{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:18px 22px;margin-top:18px;text-align:center;color:#bf360c;font-size:.86rem;line-height:1.6}
         footer{text-align:center;padding:18px;color:#aaa;font-size:.72rem;line-height:1.6}
         @media(max-width:600px){
             .cards{grid-template-columns:repeat(2,1fr)}
@@ -52,16 +100,26 @@
             .card-value{font-size:1.3rem}
             header h1{font-size:1.1rem}
             .container{padding:10px}
+            .tab-btn{padding:8px 18px;font-size:.84rem}
         }
     </style>
 </head>
 <body>
 <header>
-    <div>
-        <h1>📊 金融市場儀表板</h1>
-        <div class="update-info" id="updateTime">載入中...</div>
+    <div class="header-top">
+        <div>
+            <h1>🔒 柯柯的小秘密</h1>
+            <div class="update-info" id="updateTime">載入中...</div>
+        </div>
     </div>
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('finance',this)">金融市場</button>
+        <button class="tab-btn" onclick="switchTab('irb',this)">IRB</button>
+    </nav>
 </header>
+
+<!-- ===== 金融市場 Tab ===== -->
+<div class="tab-content active" id="tab-finance">
 <div class="container">
     <div id="errorArea"></div>
     <div class="cards">
@@ -133,11 +191,238 @@
         </table>
     </div>
 </div>
+</div>
+
+<!-- ===== IRB Tab ===== -->
+<div class="tab-content" id="tab-irb">
+<div class="container">
+    <!-- Step 1: 選擇研究類型 -->
+    <div id="irb-step1">
+        <div class="irb-header">
+            <div class="irb-badge">北醫大 TMU-JIRB 專用</div>
+            <h2>IRB 新案申請輔助工具</h2>
+            <p>請先選擇您的研究案類型，系統會根據類型載入對應的 Form060 欄位</p>
+        </div>
+        <div class="type-grid">
+            <div class="type-card" onclick="selectIRBType('retrospective',this)">
+                <div class="type-check">✓</div>
+                <div class="type-icon">🏥</div>
+                <div class="type-name">病歷回溯</div>
+                <div class="type-desc">回顧性調閱醫療紀錄、病歷資料分析研究</div>
+            </div>
+            <div class="type-card" onclick="selectIRBType('database',this)">
+                <div class="type-check">✓</div>
+                <div class="type-icon">🗄️</div>
+                <div class="type-name">資料庫研究</div>
+                <div class="type-desc">使用健保資料庫、臨床研究資料庫、衛福部資科中心等</div>
+            </div>
+            <div class="type-card" onclick="selectIRBType('survey',this)">
+                <div class="type-check">✓</div>
+                <div class="type-icon">📋</div>
+                <div class="type-name">單純問卷研究</div>
+                <div class="type-desc">以問卷或量表為主要研究工具的調查研究</div>
+            </div>
+            <div class="type-card" onclick="selectIRBType('biobank',this)">
+                <div class="type-check">✓</div>
+                <div class="type-icon">🧬</div>
+                <div class="type-name">生物資料庫檢體研究</div>
+                <div class="type-desc">使用經衛福部查核通過之生物資料庫檢體</div>
+            </div>
+        </div>
+        <div class="irb-next-area">
+            <button class="irb-next-btn" id="irbNextBtn" onclick="goIRBStep2()">選好了，下一步</button>
+        </div>
+    </div>
+
+    <!-- Step 2: 貼上企畫書 -->
+    <div id="irb-step2" class="irb-step2">
+        <span class="irb-back-link" onclick="goIRBStep1()">← 重新選擇研究類型</span>
+        <div class="irb-header">
+            <div class="irb-badge" id="irb-type-badge">--</div>
+            <h3>上傳您的研究企畫書</h3>
+            <p>上傳計畫書檔案，系統將協助您對應到 Form060 的各個欄位</p>
+        </div>
+        <div class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept=".docx,.pdf,.txt,.doc">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">點擊上傳或拖曳檔案到這裡</div>
+            <div class="upload-hint">上傳您的研究企畫書，系統將讀取內容</div>
+            <div class="upload-formats">支援格式：.docx / .pdf / .txt</div>
+        </div>
+        <div class="file-preview" id="filePreview">
+            <div class="file-info">
+                <span class="file-icon" id="fileIcon">📄</span>
+                <div>
+                    <div class="file-name" id="fileName">--</div>
+                    <div class="file-size" id="fileSize">--</div>
+                </div>
+                <button class="file-remove" onclick="removeFile()">移除檔案</button>
+            </div>
+            <div class="file-text-preview" id="fileTextPreview">讀取中...</div>
+        </div>
+        <div class="irb-coming-soon">
+            🚧 欄位對應與匯出功能開發中 — 待確認格式後會加入自動對應與 Word 匯出功能
+        </div>
+    </div>
+</div>
+</div>
+
 <footer>
     資料來源：Yahoo Finance｜資料可能延遲 15–20 分鐘｜僅供參考，不構成投資建議
 </footer>
 
 <script>
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+}
+window.switchTab = switchTab;
+
+// ── IRB 功能 ──
+var selectedIRBType = null;
+var IRB_LABELS = {
+    retrospective: '病歷回溯',
+    database: '資料庫研究',
+    survey: '單純問卷研究',
+    biobank: '生物資料庫檢體研究'
+};
+
+function selectIRBType(type, el) {
+    selectedIRBType = type;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('irbNextBtn').classList.add('enabled');
+}
+window.selectIRBType = selectIRBType;
+
+function goIRBStep2() {
+    if (!selectedIRBType) return;
+    document.getElementById('irb-step1').style.display = 'none';
+    document.getElementById('irb-step2').style.display = 'block';
+    document.getElementById('irb-type-badge').textContent = IRB_LABELS[selectedIRBType];
+}
+window.goIRBStep2 = goIRBStep2;
+
+function goIRBStep1() {
+    document.getElementById('irb-step2').style.display = 'none';
+    document.getElementById('irb-step1').style.display = 'block';
+}
+window.goIRBStep1 = goIRBStep1;
+
+var uploadedFileText = '';
+
+function initUploadZone() {
+    var zone = document.getElementById('uploadZone');
+    var input = document.getElementById('fileInput');
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+    input.addEventListener('change', function() { if (input.files.length) handleFile(input.files[0]); });
+}
+
+function handleFile(file) {
+    var ext = file.name.split('.').pop().toLowerCase();
+    var icons = { docx: '📝', doc: '📝', pdf: '📕', txt: '📄' };
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatFileSize(file.size);
+    document.getElementById('fileIcon').textContent = icons[ext] || '📄';
+    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('filePreview').style.display = 'block';
+    document.getElementById('fileTextPreview').textContent = '讀取中...';
+
+    if (ext === 'txt') {
+        var reader = new FileReader();
+        reader.onload = function(e) { showExtractedText(e.target.result); };
+        reader.readAsText(file, 'UTF-8');
+    } else if (ext === 'docx') {
+        readDocx(file);
+    } else if (ext === 'pdf') {
+        readPdf(file);
+    } else {
+        document.getElementById('fileTextPreview').textContent = '不支援此檔案格式，請上傳 .docx、.pdf 或 .txt 檔案';
+    }
+}
+
+function showExtractedText(text) {
+    uploadedFileText = text;
+    var preview = document.getElementById('fileTextPreview');
+    if (!text || !text.trim()) { preview.textContent = '（未偵測到文字內容）'; return; }
+    preview.textContent = text.length > 3000 ? text.substring(0, 3000) + '\n\n... 以上為前 3000 字預覽' : text;
+}
+
+function readDocx(file) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+    s.onload = function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            mammoth.extractRawText({ arrayBuffer: e.target.result })
+                .then(function(result) { showExtractedText(result.value); })
+                .catch(function() { document.getElementById('fileTextPreview').textContent = 'Word 檔案讀取失敗，請確認檔案格式正確'; });
+        };
+        reader.readAsArrayBuffer(file);
+    };
+    s.onerror = function() { document.getElementById('fileTextPreview').textContent = 'Word 解析工具載入失敗，請檢查網路連線'; };
+    document.head.appendChild(s);
+}
+
+function readPdf(file) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs';
+    s.type = 'module';
+    s.onload = function() { extractPdfText(file); };
+    s.onerror = function() {
+        var s2 = document.createElement('script');
+        s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        s2.onload = function() { extractPdfText(file); };
+        s2.onerror = function() { document.getElementById('fileTextPreview').textContent = 'PDF 解析工具載入失敗，請檢查網路連線'; };
+        document.head.appendChild(s2);
+    };
+    document.head.appendChild(s);
+}
+
+function extractPdfText(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+        if (!pdfjsLib) { document.getElementById('fileTextPreview').textContent = 'PDF 解析工具載入失敗'; return; }
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        pdfjsLib.getDocument({ data: new Uint8Array(e.target.result) }).promise.then(function(pdf) {
+            var texts = [], loaded = 0;
+            for (var i = 1; i <= pdf.numPages; i++) {
+                (function(pageNum) {
+                    pdf.getPage(pageNum).then(function(page) {
+                        page.getTextContent().then(function(content) {
+                            texts[pageNum - 1] = content.items.map(function(item) { return item.str; }).join(' ');
+                            loaded++;
+                            if (loaded === pdf.numPages) showExtractedText(texts.join('\n'));
+                        });
+                    });
+                })(i);
+            }
+        }).catch(function() { document.getElementById('fileTextPreview').textContent = 'PDF 檔案讀取失敗，請確認檔案格式正確'; });
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function removeFile() {
+    uploadedFileText = '';
+    document.getElementById('filePreview').style.display = 'none';
+    document.getElementById('uploadZone').style.display = 'block';
+    document.getElementById('fileInput').value = '';
+}
+window.removeFile = removeFile;
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+document.addEventListener('DOMContentLoaded', initUploadZone);
+
 function bootApp(){
 const ASSETS=[
     {key:'usd',symbol:'USDTWD=X',label:'美金/台幣',color:'#2196F3',colorLight:'rgba(33,150,243,.08)',fmt:v=>v.toFixed(3)},
@@ -266,7 +551,6 @@ window.switchPeriod=async function(range,btn){
     isDemoMode=false;renderAll();
 };
 
-// Auto-refresh every 5 minutes
 function startAutoRefresh(){
     if(refreshTimer)clearInterval(refreshTimer);
     refreshTimer=setInterval(()=>{
@@ -275,7 +559,6 @@ function startAutoRefresh(){
     },5*60*1000);
 }
 
-// Init
 (async()=>{
     showLoading(true);
     const errors=await loadAllData(currentRange);
