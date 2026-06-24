@@ -124,6 +124,39 @@
         .form060-back-btn{padding:12px 36px;background:#fff;color:#555;border:2px solid #ccc;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
         .form060-back-btn:hover{border-color:#999;color:#333}
         .form060-autofill-tag{display:inline-block;font-size:.66rem;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:600}
+        .tab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+        .promo-header{text-align:center;margin-bottom:24px}
+        .promo-header h2{font-size:1.2rem;color:#1a1a2e;font-weight:700;margin-bottom:6px}
+        .promo-header p{font-size:.84rem;color:#888;line-height:1.5}
+        .cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+        .cc-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid #1565c0;transition:transform .2s}
+        .cc-card:hover{transform:translateY(-2px)}
+        .cc-card.taishin{border-top-color:#c62828}
+        .cc-card.costco{border-top-color:#e65100}
+        .cc-card.fubon{border-top-color:#00c300}
+        .cc-card.obank{border-top-color:#6a1b9a}
+        .cc-card-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+        .cc-card-icon{font-size:2rem}
+        .cc-card-name{font-size:1rem;font-weight:700;color:#1a1a2e}
+        .cc-card-bank{font-size:.74rem;color:#999}
+        .cc-benefits{list-style:none;padding:0;margin:0 0 14px}
+        .cc-benefits li{font-size:.82rem;color:#444;padding:5px 0;border-bottom:1px solid #f0f0f0;line-height:1.5}
+        .cc-benefits li:last-child{border-bottom:none}
+        .cc-benefits li::before{content:'✦ ';color:#1565c0;font-weight:700}
+        .cc-link{display:inline-block;font-size:.8rem;color:#1565c0;font-weight:600;text-decoration:none;padding:6px 14px;border:1px solid #bbdefb;border-radius:6px;transition:all .2s}
+        .cc-link:hover{background:#e3f2fd}
+        .flight-search{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+        .flight-search h3{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:16px}
+        .flight-dest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+        .flight-dest{background:#f8f9fa;border:2px solid #e0e8f0;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;text-decoration:none;color:#333}
+        .flight-dest:hover{border-color:#1565c0;background:#f0f5ff;transform:translateY(-2px)}
+        .flight-dest .dest-emoji{font-size:1.8rem;margin-bottom:6px}
+        .flight-dest .dest-name{font-size:.9rem;font-weight:700}
+        .flight-dest .dest-hint{font-size:.72rem;color:#999;margin-top:2px}
+        .flight-sites{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+        .flight-site-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:#fff;border:2px solid #e0e0e0;border-radius:8px;font-size:.84rem;font-weight:600;color:#333;text-decoration:none;transition:all .2s}
+        .flight-site-btn:hover{border-color:#1565c0;color:#1565c0;background:#f0f5ff}
+        .promo-note{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:14px 18px;margin-top:18px;font-size:.8rem;color:#bf360c;line-height:1.6;text-align:center}
         footer{text-align:center;padding:18px;color:#aaa;font-size:.72rem;line-height:1.6}
         @media(max-width:600px){
             .cards{grid-template-columns:repeat(2,1fr)}
@@ -131,8 +164,10 @@
             .card-value{font-size:1.3rem}
             header h1{font-size:1.1rem}
             .container{padding:10px}
-            .tab-btn{padding:8px 18px;font-size:.84rem}
+            .tab-btn{padding:8px 14px;font-size:.8rem}
             .form060-row{grid-template-columns:1fr}
+            .cc-grid{grid-template-columns:1fr}
+            .flight-dest-grid{grid-template-columns:repeat(2,1fr)}
         }
     </style>
 </head>
@@ -147,6 +182,8 @@
     <nav class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('finance',this)">金融市場</button>
         <button class="tab-btn" onclick="switchTab('irb',this)">IRB</button>
+        <button class="tab-btn" onclick="switchTab('flights',this)">機票優惠</button>
+        <button class="tab-btn" onclick="switchTab('cards',this)">信用卡</button>
     </nav>
 </header>
 
@@ -473,6 +510,172 @@
             <button class="form060-back-btn" onclick="backToStep2()">← 返回修改</button>
             <button class="form060-export-btn" onclick="exportIRB()">匯出 IRB 申請書</button>
         </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== 機票優惠 Tab ===== -->
+<div class="tab-content" id="tab-flights">
+<div class="container">
+    <div class="promo-header">
+        <h2>✈️ 機票優惠快搜</h2>
+        <p>從台北出發，快速查詢熱門航線最低票價</p>
+    </div>
+
+    <div class="flight-search">
+        <h3>🔥 熱門目的地</h3>
+        <div class="flight-dest-grid">
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+NRT" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇯🇵</div>
+                <div class="dest-name">東京</div>
+                <div class="dest-hint">NRT / HND</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+KIX" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇯🇵</div>
+                <div class="dest-name">大阪</div>
+                <div class="dest-hint">KIX</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+ICN" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇰🇷</div>
+                <div class="dest-name">首爾</div>
+                <div class="dest-hint">ICN</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+BKK" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇹🇭</div>
+                <div class="dest-name">曼谷</div>
+                <div class="dest-hint">BKK</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+SIN" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇸🇬</div>
+                <div class="dest-name">新加坡</div>
+                <div class="dest-hint">SIN</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+HKG" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇭🇰</div>
+                <div class="dest-name">香港</div>
+                <div class="dest-hint">HKG</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+DPS" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇮🇩</div>
+                <div class="dest-name">峇里島</div>
+                <div class="dest-hint">DPS</div>
+            </a>
+            <a class="flight-dest" href="https://www.google.com/travel/flights?q=TPE+to+LAX" target="_blank" rel="noopener">
+                <div class="dest-emoji">🇺🇸</div>
+                <div class="dest-name">洛杉磯</div>
+                <div class="dest-hint">LAX</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="flight-search">
+        <h3>🔍 比價網站</h3>
+        <div class="flight-sites">
+            <a class="flight-site-btn" href="https://www.google.com/travel/flights" target="_blank" rel="noopener">🔍 Google Flights</a>
+            <a class="flight-site-btn" href="https://www.skyscanner.com.tw/" target="_blank" rel="noopener">🌐 Skyscanner</a>
+            <a class="flight-site-btn" href="https://www.funtime.com.tw/oveticket/" target="_blank" rel="noopener">⏰ FunTime 機票比價</a>
+            <a class="flight-site-btn" href="https://www.tigerair.com/zh-tw/" target="_blank" rel="noopener">🐯 台灣虎航</a>
+            <a class="flight-site-btn" href="https://www.flypeach.com/tw" target="_blank" rel="noopener">🍑 樂桃航空</a>
+            <a class="flight-site-btn" href="https://booking.starlux-airlines.com/" target="_blank" rel="noopener">⭐ 星宇航空</a>
+        </div>
+    </div>
+
+    <div class="promo-note">
+        💡 小提示：用台新 FLYGO 卡刷機票有海外消費回饋，富邦 LINE PAY 卡有指定通路加碼！
+    </div>
+</div>
+</div>
+
+<!-- ===== 信用卡優惠 Tab ===== -->
+<div class="tab-content" id="tab-cards">
+<div class="container">
+    <div class="promo-header">
+        <h2>💳 我的信用卡優惠</h2>
+        <p>你手上的卡片有哪些好康，一目瞭然</p>
+    </div>
+
+    <div class="cc-grid">
+        <div class="cc-card taishin">
+            <div class="cc-card-head">
+                <div class="cc-card-icon">🔴</div>
+                <div>
+                    <div class="cc-card-name">台新 FLYGO 卡</div>
+                    <div class="cc-card-bank">台新銀行</div>
+                </div>
+            </div>
+            <ul class="cc-benefits">
+                <li>海外消費最高 2.8% 回饋（指定通路最高 5%）</li>
+                <li>國內旅遊/航空/訂房平台加碼回饋</li>
+                <li>機場接送、貴賓室優惠</li>
+                <li>旅遊不便險、海外全額刷卡險</li>
+            </ul>
+            <a class="cc-link" href="https://www.taishinbank.com.tw/TSB/personal/credit-card/overview/flygo/" target="_blank" rel="noopener">查看最新優惠 →</a>
+        </div>
+
+        <div class="cc-card costco">
+            <div class="cc-card-head">
+                <div class="cc-card-icon">🟠</div>
+                <div>
+                    <div class="cc-card-name">Costco 聯名卡</div>
+                    <div class="cc-card-bank">國泰世華銀行</div>
+                </div>
+            </div>
+            <ul class="cc-benefits">
+                <li>好市多消費 1% 回饋（年度購物金）</li>
+                <li>好市多加油站額外回饋</li>
+                <li>全聯、家樂福等通路回饋</li>
+                <li>自動成為 Costco 會員卡</li>
+            </ul>
+            <a class="cc-link" href="https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/costco/" target="_blank" rel="noopener">查看最新優惠 →</a>
+        </div>
+
+        <div class="cc-card fubon">
+            <div class="cc-card-head">
+                <div class="cc-card-icon">🟢</div>
+                <div>
+                    <div class="cc-card-name">富邦 LINE Pay 卡</div>
+                    <div class="cc-card-bank">台北富邦銀行</div>
+                </div>
+            </div>
+            <ul class="cc-benefits">
+                <li>LINE Pay 消費享 LINE Points 回饋</li>
+                <li>指定通路（超商、餐飲等）加碼</li>
+                <li>行動支付綁定加碼回饋</li>
+                <li>LINE Points 可折抵消費</li>
+            </ul>
+            <a class="cc-link" href="https://www.fubon.com/banking/personal/credit_card/" target="_blank" rel="noopener">查看最新優惠 →</a>
+        </div>
+
+        <div class="cc-card obank">
+            <div class="cc-card-head">
+                <div class="cc-card-icon">🟣</div>
+                <div>
+                    <div class="cc-card-name">王道簽帳金融卡</div>
+                    <div class="cc-card-bank">王道銀行 O-Bank</div>
+                </div>
+            </div>
+            <ul class="cc-benefits">
+                <li>國內消費 0.3%～0.5% 現金回饋</li>
+                <li>海外消費回饋（免海外交易手續費活動）</li>
+                <li>搭配高利活儲帳戶更划算</li>
+                <li>純網銀免臨櫃，線上申辦方便</li>
+            </ul>
+            <a class="cc-link" href="https://www.o-bank.com/" target="_blank" rel="noopener">查看最新優惠 →</a>
+        </div>
+    </div>
+
+    <div class="flight-search">
+        <h3>📊 刷卡攻略速查</h3>
+        <ul class="cc-benefits">
+            <li><strong>出國刷機票/海外消費</strong> → 台新 FLYGO（海外回饋最高）</li>
+            <li><strong>好市多購物</strong> → Costco 聯名卡（好市多專屬回饋）</li>
+            <li><strong>超商/餐飲/LINE Pay</strong> → 富邦 LINE Pay（指定通路加碼）</li>
+            <li><strong>日常小額/存款搭配</strong> → 王道簽帳卡（配合高利活儲）</li>
+        </ul>
+    </div>
+
+    <div class="promo-note">
+        ⚠️ 各卡片回饋比例可能隨銀行公告調整，請以各銀行官網公告為準
     </div>
 </div>
 </div>
