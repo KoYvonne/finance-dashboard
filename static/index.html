@@ -228,6 +228,18 @@
             <div class="card-change flat" id="change-googl">--</div>
             <div class="card-sub" id="sub-googl"></div>
         </div>
+        <div class="card aaoi">
+            <div class="card-label">AAOI Applied Optoelectronics</div>
+            <div class="card-value" id="price-aaoi">--</div>
+            <div class="card-change flat" id="change-aaoi">--</div>
+            <div class="card-sub" id="sub-aaoi"></div>
+        </div>
+        <div class="card cht">
+            <div class="card-label">2412 中華電信</div>
+            <div class="card-value" id="price-cht">--</div>
+            <div class="card-change flat" id="change-cht">--</div>
+            <div class="card-sub" id="sub-cht"></div>
+        </div>
     </div>
     <div class="controls">
         <button class="btn active" onclick="switchPeriod('5d',this)">1 週</button>
@@ -1045,6 +1057,8 @@ const ASSETS=[
     {key:'taiex',symbol:'^TWII',label:'大盤',color:'#00BCD4',colorLight:'rgba(0,188,212,.08)',fmt:v=>v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
     {key:'006208',symbol:'006208.TW',label:'006208',color:'#4CAF50',colorLight:'rgba(76,175,80,.08)',fmt:v=>v.toFixed(2)},
     {key:'googl',symbol:'GOOGL',label:'GOOGL',color:'#e040fb',colorLight:'rgba(224,64,251,.08)',fmt:v=>v.toFixed(2)},
+    {key:'aaoi',symbol:'AAOI',label:'AAOI',color:'#ff6f00',colorLight:'rgba(255,111,0,.08)',fmt:v=>v.toFixed(2)},
+    {key:'cht',symbol:'2412.TW',label:'中華電信',color:'#00897b',colorLight:'rgba(0,137,123,.08)',fmt:v=>v.toFixed(2)},
 ];
 
 let currentRange='5d',allData={},compChart=null,indCharts={},isDemoMode=false,refreshTimer=null;
