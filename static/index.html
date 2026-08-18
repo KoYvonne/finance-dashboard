@@ -168,7 +168,36 @@
             .form060-row{grid-template-columns:1fr}
             .cc-grid{grid-template-columns:1fr}
             .flight-dest-grid{grid-template-columns:repeat(2,1fr)}
+            .omi-vessel-grid{grid-template-columns:repeat(2,1fr)}
         }
+        .omi-radio-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+        .omi-radio-label{display:flex;align-items:center;gap:6px;padding:8px 16px;background:#f8f9fa;border:2px solid #e0e8f0;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;transition:all .2s}
+        .omi-radio-label:hover{border-color:#1565c0;background:#f0f5ff}
+        .omi-radio-label input[type="radio"]{accent-color:#1565c0}
+        .omi-radio-label.checked{border-color:#1565c0;background:#e3f2fd;color:#1565c0}
+        .omi-vessel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
+        .omi-vessel-item{background:#f8f9fa;border-radius:8px;padding:12px}
+        .omi-vessel-item label{font-size:.82rem;font-weight:600;color:#555;display:block;margin-bottom:4px}
+        .omi-vessel-item input{width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:8px 10px;font-size:.9rem;font-family:inherit}
+        .omi-vessel-item input:focus{outline:none;border-color:#1565c0}
+        .omi-section{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border-left:4px solid #1565c0}
+        .omi-section-title{font-size:.92rem;font-weight:700;color:#1a1a2e;margin-bottom:12px}
+        .omi-cto-fields{display:none;margin-top:10px}
+        .omi-cto-fields.show{display:block}
+        .omi-extracted-banner{background:#e3f2fd;border:1px solid #90caf9;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:.82rem;color:#1565c0;display:none}
+        .omi-extracted-banner.show{display:block}
+        .omi-evaluate-btn{padding:14px 48px;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:20px}
+        .omi-evaluate-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,71,161,.35)}
+        .omi-result-card{border-radius:12px;padding:24px;margin-top:20px;text-align:center;display:none}
+        .omi-result-card.show{display:block}
+        .omi-result-card.positive{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:2px solid #ff9800}
+        .omi-result-card.negative{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #4caf50}
+        .omi-result-title{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+        .omi-result-card.positive .omi-result-title{color:#e65100}
+        .omi-result-card.negative .omi-result-title{color:#2e7d32}
+        .omi-detail-list{text-align:left;margin-top:16px;padding:14px;background:rgba(255,255,255,.7);border-radius:8px}
+        .omi-detail-item{font-size:.84rem;color:#555;padding:4px 0;line-height:1.6}
+        .omi-detail-item.pass{color:#2e7d32}.omi-detail-item.fail{color:#c62828}
     </style>
 </head>
 <body>
@@ -184,6 +213,7 @@
         <button class="tab-btn" onclick="switchTab('irb',this)">IRB</button>
         <button class="tab-btn" onclick="switchTab('flights',this)">機票優惠</button>
         <button class="tab-btn" onclick="switchTab('cards',this)">信用卡</button>
+        <button class="tab-btn" onclick="switchTab('omi',this)">OMI 評估</button>
     </nav>
 </header>
 
@@ -840,6 +870,128 @@
 </div>
 </div>
 
+<!-- ===== OMI 評估 Tab ===== -->
+<div class="tab-content" id="tab-omi">
+<div class="container">
+    <div class="irb-header">
+        <div class="irb-badge">研究專用</div>
+        <h2>OMI 評估工具</h2>
+        <p>上傳心導管報告 PDF，系統將自動擷取資料並評估是否符合 OMI 定義</p>
+    </div>
+
+    <div class="omi-section" style="border-left-color:#ff9800">
+        <div class="omi-section-title">OMI 定義</div>
+        <div style="font-size:.82rem;color:#555;line-height:1.8">
+            <strong>符合以下任一條件即為 OMI：</strong><br>
+            <strong>條件 1：</strong>TIMI flow grade 0–1<br>
+            <strong>條件 2：</strong>TIMI flow grade 2–3，且 TnI 升高，且接受緊急/急迫性血管重建術，且符合以下任一：<br>
+            &emsp;(1) LAD 或 LCX 或 RCA &ge;90% 狹窄<br>
+            &emsp;(2) LMCA &gt;50% 合併其他血管 &gt;70% 狹窄<br>
+            &emsp;(3) 慢性全堵塞(CTO)的供應血管 &gt;80% 狹窄
+        </div>
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">上傳心導管報告</div>
+        <div class="upload-zone" id="omiUploadZone">
+            <input type="file" id="omiFileInput" accept=".pdf,.docx,.txt">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">點擊上傳或拖曳心導管報告 PDF</div>
+            <div class="upload-hint">系統將自動擷取冠狀動脈數據與 TIMI flow</div>
+            <div class="upload-formats">支援格式：.pdf / .docx / .txt</div>
+        </div>
+        <div class="file-preview" id="omiFilePreview">
+            <div class="file-info">
+                <span class="file-icon" id="omiFileIcon">📕</span>
+                <div>
+                    <div class="file-name" id="omiFileName">--</div>
+                    <div class="file-size" id="omiFileSize">--</div>
+                </div>
+                <button class="file-remove" onclick="removeOmiFile()">移除</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="omi-extracted-banner" id="omiExtractedBanner">
+        已從報告中自動擷取數據，請核對下方資料是否正確
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">TIMI Flow Grade（Culprit vessel）</div>
+        <div class="omi-radio-group" id="omi-timi-group">
+            <label class="omi-radio-label"><input type="radio" name="omi-timi" value="0" onchange="updateOmiRadio(this)"> TIMI 0</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-timi" value="1" onchange="updateOmiRadio(this)"> TIMI 1</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-timi" value="2" onchange="updateOmiRadio(this)"> TIMI 2</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-timi" value="3" onchange="updateOmiRadio(this)"> TIMI 3</label>
+        </div>
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">TnI 是否升高</div>
+        <div class="omi-radio-group">
+            <label class="omi-radio-label"><input type="radio" name="omi-tni" value="yes" onchange="updateOmiRadio(this)"> 是（升高）</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-tni" value="no" onchange="updateOmiRadio(this)"> 否（正常）</label>
+        </div>
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">是否接受緊急/急迫性血管重建術</div>
+        <div class="omi-radio-group">
+            <label class="omi-radio-label"><input type="radio" name="omi-revasc" value="yes" onchange="updateOmiRadio(this)"> 是</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-revasc" value="no" onchange="updateOmiRadio(this)"> 否</label>
+        </div>
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">冠狀動脈狹窄程度 (%)</div>
+        <div style="font-size:.76rem;color:#999;margin-bottom:8px">填入各血管最大狹窄百分比，無狹窄可留空</div>
+        <div class="omi-vessel-grid">
+            <div class="omi-vessel-item">
+                <label>LMCA（左主幹）</label>
+                <input type="number" id="omi-lmca" min="0" max="100" placeholder="% 狹窄">
+            </div>
+            <div class="omi-vessel-item">
+                <label>LAD（左前降支）</label>
+                <input type="number" id="omi-lad" min="0" max="100" placeholder="% 狹窄">
+            </div>
+            <div class="omi-vessel-item">
+                <label>LCX（左迴旋支）</label>
+                <input type="number" id="omi-lcx" min="0" max="100" placeholder="% 狹窄">
+            </div>
+            <div class="omi-vessel-item">
+                <label>RCA（右冠狀動脈）</label>
+                <input type="number" id="omi-rca" min="0" max="100" placeholder="% 狹窄">
+            </div>
+        </div>
+    </div>
+
+    <div class="omi-section">
+        <div class="omi-section-title">慢性全堵塞 (CTO)</div>
+        <div class="omi-radio-group">
+            <label class="omi-radio-label"><input type="radio" name="omi-cto" value="yes" onchange="updateOmiRadio(this);toggleCtoFields(true)"> 是</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-cto" value="no" onchange="updateOmiRadio(this);toggleCtoFields(false)"> 否</label>
+        </div>
+        <div class="omi-cto-fields" id="omiCtoFields">
+            <div class="omi-vessel-item" style="max-width:300px;margin-top:10px">
+                <label>CTO 供應血管狹窄程度 (%)</label>
+                <input type="number" id="omi-cto-supply" min="0" max="100" placeholder="% 狹窄">
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center">
+        <button class="omi-evaluate-btn" onclick="runOmiEval()">開始評估</button>
+        <button class="form060-back-btn" onclick="resetOMI()" style="display:none;margin-left:10px" id="omiResetBtn">重新評估</button>
+    </div>
+
+    <div class="omi-result-card" id="omiResult">
+        <div class="omi-result-title" id="omiResultTitle">--</div>
+        <div id="omiResultSubtitle" style="font-size:.88rem;color:#666"></div>
+        <div class="omi-detail-list" id="omiDetailList"></div>
+    </div>
+</div>
+</div>
+
 <footer>
     資料來源：Yahoo Finance｜資料可能延遲 15–20 分鐘｜僅供參考，不構成投資建議
 </footer>
@@ -1047,7 +1199,224 @@ function exportIRB() {
 }
 window.exportIRB = exportIRB;
 
-document.addEventListener('DOMContentLoaded', initUploadZone);
+// ── OMI 評估功能 ──
+function updateOmiRadio(el) {
+    var group = el.closest('.omi-radio-group');
+    group.querySelectorAll('.omi-radio-label').forEach(function(l) { l.classList.remove('checked'); });
+    el.closest('.omi-radio-label').classList.add('checked');
+}
+window.updateOmiRadio = updateOmiRadio;
+
+function toggleCtoFields(show) {
+    document.getElementById('omiCtoFields').classList.toggle('show', show);
+}
+window.toggleCtoFields = toggleCtoFields;
+
+function initOmiUpload() {
+    var zone = document.getElementById('omiUploadZone');
+    var input = document.getElementById('omiFileInput');
+    if (!zone || !input) return;
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files.length) handleOmiFile(e.dataTransfer.files[0]); });
+    input.addEventListener('change', function() { if (input.files.length) handleOmiFile(input.files[0]); });
+}
+
+function handleOmiFile(file) {
+    var ext = file.name.split('.').pop().toLowerCase();
+    var icons = { pdf: '📕', docx: '📝', txt: '📄' };
+    document.getElementById('omiFileName').textContent = file.name;
+    document.getElementById('omiFileSize').textContent = formatFileSize(file.size);
+    document.getElementById('omiFileIcon').textContent = icons[ext] || '📄';
+    document.getElementById('omiUploadZone').style.display = 'none';
+    document.getElementById('omiFilePreview').style.display = 'block';
+
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch('/api/extract-text', { method: 'POST', body: formData })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.text) parseOmiFromText(data.text);
+        })
+        .catch(function() {});
+}
+
+function removeOmiFile() {
+    document.getElementById('omiFilePreview').style.display = 'none';
+    document.getElementById('omiUploadZone').style.display = 'block';
+    document.getElementById('omiFileInput').value = '';
+    document.getElementById('omiExtractedBanner').classList.remove('show');
+}
+window.removeOmiFile = removeOmiFile;
+
+function setOmiRadio(name, value) {
+    var radio = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+    if (radio) { radio.checked = true; radio.closest('.omi-radio-label').classList.add('checked'); }
+}
+
+function parseOmiFromText(text) {
+    var extracted = false;
+
+    var timiMatch = text.match(/TIMI[\s\-]*(\d)/i);
+    if (timiMatch) {
+        setOmiRadio('omi-timi', timiMatch[1]);
+        extracted = true;
+    }
+
+    function findMaxStenosis(vesselPattern) {
+        var nums = [];
+        var regex = new RegExp(vesselPattern + '[^%]*?(\\d+)\\s*%', 'gi');
+        var m;
+        while ((m = regex.exec(text)) !== null) nums.push(parseInt(m[1]));
+        return nums.length ? Math.max.apply(null, nums) : null;
+    }
+
+    var lcxMax = findMaxStenosis('LCX');
+    if (lcxMax !== null) { document.getElementById('omi-lcx').value = lcxMax; extracted = true; }
+
+    var ladMax = findMaxStenosis('LAD');
+    if (ladMax !== null) { document.getElementById('omi-lad').value = ladMax; extracted = true; }
+
+    var rcaMax = findMaxStenosis('RCA');
+    if (rcaMax !== null) { document.getElementById('omi-rca').value = rcaMax; extracted = true; }
+
+    var lmMax = findMaxStenosis('LM(?:CA)?');
+    if (lmMax !== null) { document.getElementById('omi-lmca').value = lmMax; extracted = true; }
+
+    if (/Intervention[:\s]*Yes/i.test(text)) {
+        setOmiRadio('omi-revasc', 'yes');
+        extracted = true;
+    }
+
+    if (/100\s*%/.test(text)) {
+        setOmiRadio('omi-cto', 'yes');
+        toggleCtoFields(true);
+        extracted = true;
+    }
+
+    if (extracted) document.getElementById('omiExtractedBanner').classList.add('show');
+}
+
+function runOmiEval() {
+    var timiRadio = document.querySelector('input[name="omi-timi"]:checked');
+    if (!timiRadio) { alert('請選擇 TIMI flow grade'); return; }
+    var timi = parseInt(timiRadio.value);
+
+    var tniRadio = document.querySelector('input[name="omi-tni"]:checked');
+    var revascRadio = document.querySelector('input[name="omi-revasc"]:checked');
+    var ctoRadio = document.querySelector('input[name="omi-cto"]:checked');
+
+    var tniElevated = tniRadio && tniRadio.value === 'yes';
+    var emergencyRevasc = revascRadio && revascRadio.value === 'yes';
+    var hasCTO = ctoRadio && ctoRadio.value === 'yes';
+
+    var lmca = parseFloat(document.getElementById('omi-lmca').value) || 0;
+    var lad = parseFloat(document.getElementById('omi-lad').value) || 0;
+    var lcx = parseFloat(document.getElementById('omi-lcx').value) || 0;
+    var rca = parseFloat(document.getElementById('omi-rca').value) || 0;
+    var ctoSupply = parseFloat(document.getElementById('omi-cto-supply').value) || 0;
+
+    var isOMI = false, criterion = '', details = [];
+
+    if (timi <= 1) {
+        isOMI = true;
+        criterion = '1';
+        details.push({ text: 'TIMI flow grade ' + timi + '（0–1）→ 直接符合 OMI 條件 1', pass: true });
+    } else {
+        details.push({ text: 'TIMI flow grade ' + timi + '（2–3）→ 需進一步評估條件 2', pass: null });
+
+        if (!tniRadio) {
+            details.push({ text: 'TnI：未填寫', pass: false });
+        } else if (!tniElevated) {
+            details.push({ text: 'TnI：未升高 → 不符合條件 2', pass: false });
+        } else {
+            details.push({ text: 'TnI：升高', pass: true });
+        }
+
+        if (!revascRadio) {
+            details.push({ text: '緊急/急迫性血管重建術：未填寫', pass: false });
+        } else if (!emergencyRevasc) {
+            details.push({ text: '緊急/急迫性血管重建術：否 → 不符合條件 2', pass: false });
+        } else {
+            details.push({ text: '緊急/急迫性血管重建術：是', pass: true });
+        }
+
+        if (tniElevated && emergencyRevasc) {
+            var vesselMet = false;
+
+            var v90 = [];
+            if (lad >= 90) v90.push('LAD ' + lad + '%');
+            if (lcx >= 90) v90.push('LCX ' + lcx + '%');
+            if (rca >= 90) v90.push('RCA ' + rca + '%');
+            if (v90.length) {
+                vesselMet = true;
+                details.push({ text: '└ 條件(1)：' + v90.join(', ') + ' ≥90%', pass: true });
+            } else {
+                details.push({ text: '└ 條件(1)：LAD ' + lad + '%, LCX ' + lcx + '%, RCA ' + rca + '% — 無≥90%', pass: false });
+            }
+
+            if (lmca > 50) {
+                var o70 = [];
+                if (lad > 70) o70.push('LAD ' + lad + '%');
+                if (lcx > 70) o70.push('LCX ' + lcx + '%');
+                if (rca > 70) o70.push('RCA ' + rca + '%');
+                if (o70.length) {
+                    if (!vesselMet) vesselMet = true;
+                    details.push({ text: '└ 條件(2)：LMCA ' + lmca + '% >50% 且 ' + o70.join(', ') + ' >70%', pass: true });
+                } else {
+                    details.push({ text: '└ 條件(2)：LMCA ' + lmca + '% >50%，但無其他血管 >70%', pass: false });
+                }
+            } else {
+                details.push({ text: '└ 條件(2)：LMCA ' + lmca + '% — 未 >50%', pass: false });
+            }
+
+            if (hasCTO) {
+                if (ctoSupply > 80) {
+                    if (!vesselMet) vesselMet = true;
+                    details.push({ text: '└ 條件(3)：CTO 供應血管 ' + ctoSupply + '% >80%', pass: true });
+                } else {
+                    details.push({ text: '└ 條件(3)：CTO 供應血管 ' + ctoSupply + '% — 未 >80%', pass: false });
+                }
+            } else {
+                details.push({ text: '└ 條件(3)：無 CTO', pass: false });
+            }
+
+            if (vesselMet) { isOMI = true; criterion = '2'; }
+        }
+    }
+
+    var resultCard = document.getElementById('omiResult');
+    resultCard.className = 'omi-result-card show ' + (isOMI ? 'positive' : 'negative');
+    document.getElementById('omiResultTitle').textContent = isOMI ? '✓ 符合 OMI 定義' : '✗ 不符合 OMI 定義';
+    document.getElementById('omiResultSubtitle').textContent = isOMI ? '符合條件 ' + criterion : '未滿足任何 OMI 條件';
+
+    var dl = document.getElementById('omiDetailList');
+    dl.innerHTML = '';
+    details.forEach(function(d) {
+        var div = document.createElement('div');
+        div.className = 'omi-detail-item' + (d.pass === true ? ' pass' : d.pass === false ? ' fail' : '');
+        div.textContent = (d.pass === true ? '✓ ' : d.pass === false ? '✗ ' : '• ') + d.text;
+        dl.appendChild(div);
+    });
+
+    document.getElementById('omiResetBtn').style.display = 'inline-block';
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+window.runOmiEval = runOmiEval;
+
+function resetOMI() {
+    document.querySelectorAll('#tab-omi input[type="radio"]').forEach(function(r) { r.checked = false; });
+    document.querySelectorAll('#tab-omi .omi-radio-label').forEach(function(l) { l.classList.remove('checked'); });
+    document.querySelectorAll('#tab-omi input[type="number"]').forEach(function(i) { i.value = ''; });
+    document.getElementById('omiResult').className = 'omi-result-card';
+    document.getElementById('omiResetBtn').style.display = 'none';
+    document.getElementById('omiCtoFields').classList.remove('show');
+    removeOmiFile();
+    window.scrollTo(0, 0);
+}
+window.resetOMI = resetOMI;
+
+document.addEventListener('DOMContentLoaded', function() { initUploadZone(); initOmiUpload(); });
 
 function bootApp(){
 const ASSETS=[
