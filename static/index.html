@@ -979,7 +979,7 @@
 
     <div style="text-align:center">
         <button class="omi-evaluate-btn" onclick="runOmiEval()">開始評估</button>
-        <button class="form060-back-btn" onclick="resetOMI()" style="display:none;margin-left:10px" id="omiResetBtn">重新評估</button>
+        <button class="form060-back-btn" onclick="resetOMI()" style="margin-left:10px">清除</button>
     </div>
 
     <div class="omi-result-card" id="omiResult">
@@ -1468,7 +1468,6 @@ function runOmiEval() {
         dl.appendChild(div);
     });
 
-    document.getElementById('omiResetBtn').style.display = 'inline-block';
     resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 window.runOmiEval = runOmiEval;
@@ -1478,7 +1477,6 @@ function resetOMI() {
     document.querySelectorAll('#tab-omi .omi-radio-label').forEach(function(l) { l.classList.remove('checked'); });
     document.querySelectorAll('#tab-omi input[type="number"]').forEach(function(i) { i.value = ''; });
     document.getElementById('omiResult').className = 'omi-result-card';
-    document.getElementById('omiResetBtn').style.display = 'none';
     document.getElementById('omiCtoFields').classList.remove('show');
     removeOmiFile();
     window.scrollTo(0, 0);
