@@ -912,9 +912,7 @@
         </div>
     </div>
 
-    <div class="omi-extracted-banner" id="omiExtractedBanner">
-        已從報告中自動擷取數據，請核對下方資料是否正確
-    </div>
+    <div class="omi-extracted-banner" id="omiExtractedBanner"></div>
 
     <div class="omi-section">
         <div class="omi-section-title">TIMI Flow Grade（Culprit vessel）</div>
@@ -1255,46 +1253,117 @@ function setOmiRadio(name, value) {
 }
 
 function parseOmiFromText(text) {
-    var extracted = false;
+    var hints = [];
 
-    var timiMatch = text.match(/TIMI[\s\-]*(\d)/i);
-    if (timiMatch) {
-        setOmiRadio('omi-timi', timiMatch[1]);
-        extracted = true;
-    }
-
-    function findMaxStenosis(vesselPattern) {
+    function findMaxStenosis(vesselName) {
         var nums = [];
-        var regex = new RegExp(vesselPattern + '[^%]*?(\\d+)\\s*%', 'gi');
-        var m;
-        while ((m = regex.exec(text)) !== null) nums.push(parseInt(m[1]));
+        var lines = text.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var vRegex = new RegExp('(?:^|\\s)' + vesselName + '[:\\s]', 'i');
+            if (!vRegex.test(line)) continue;
+            var parts = line.split(/(?=LCX:|LAD:|RCA:|LM:|LMCA:)/i);
+            for (var j = 0; j < parts.length; j++) {
+                var part = parts[j];
+                if (!new RegExp('^' + vesselName + '[:\\s]', 'i').test(part.trim())) continue;
+                var pctMatches = part.match(/(\d+)\s*%/g);
+                if (pctMatches) pctMatches.forEach(function(m) { nums.push(parseInt(m)); });
+            }
+        }
         return nums.length ? Math.max.apply(null, nums) : null;
     }
 
+    // --- 血管狹窄 ---
     var lcxMax = findMaxStenosis('LCX');
-    if (lcxMax !== null) { document.getElementById('omi-lcx').value = lcxMax; extracted = true; }
+    if (lcxMax !== null) { document.getElementById('omi-lcx').value = lcxMax; hints.push('LCX 最大狹窄 ' + lcxMax + '%'); }
 
     var ladMax = findMaxStenosis('LAD');
-    if (ladMax !== null) { document.getElementById('omi-lad').value = ladMax; extracted = true; }
+    if (ladMax !== null) { document.getElementById('omi-lad').value = ladMax; hints.push('LAD 最大狹窄 ' + ladMax + '%'); }
 
     var rcaMax = findMaxStenosis('RCA');
-    if (rcaMax !== null) { document.getElementById('omi-rca').value = rcaMax; extracted = true; }
+    if (rcaMax !== null) { document.getElementById('omi-rca').value = rcaMax; hints.push('RCA 最大狹窄 ' + rcaMax + '%'); }
 
     var lmMax = findMaxStenosis('LM(?:CA)?');
-    if (lmMax !== null) { document.getElementById('omi-lmca').value = lmMax; extracted = true; }
+    if (lmMax !== null) { document.getElementById('omi-lmca').value = lmMax; hints.push('LMCA 最大狹窄 ' + lmMax + '%'); }
 
+    // --- TIMI flow ---
+    var hasTotal = (lcxMax === 100 || ladMax === 100 || rcaMax === 100);
+    var timiMatch = text.match(/TIMI[\s\-]*(\d)/i);
+    var timiRoman = text.match(/TIMI[\s\-]*(III|II|IV|I|0)/i);
+
+    if (hasTotal) {
+        setOmiRadio('omi-timi', '0');
+        var occVessels = [];
+        if (lcxMax === 100) occVessels.push('LCX');
+        if (ladMax === 100) occVessels.push('LAD');
+        if (rcaMax === 100) occVessels.push('RCA');
+        hints.push(occVessels.join('/') + ' 100% 阻塞 → 術前 TIMI 0');
+        if (timiMatch) hints.push('（報告另記載術後 TIMI-' + timiMatch[1] + '，已採用術前 TIMI 0）');
+    } else if (timiMatch) {
+        setOmiRadio('omi-timi', timiMatch[1]);
+        hints.push('報告記載 TIMI-' + timiMatch[1]);
+    } else if (timiRoman) {
+        var romanMap = {'0':'0','I':'1','II':'2','III':'3','IV':'4'};
+        var tv = romanMap[timiRoman[1]] || null;
+        if (tv) { setOmiRadio('omi-timi', tv); hints.push('報告記載 TIMI ' + timiRoman[1] + ' → TIMI ' + tv); }
+    } else if (/total\s*occlusion|complete\s*occlusion|completely?\s*occluded/i.test(text)) {
+        setOmiRadio('omi-timi', '0');
+        hints.push('報告描述 total occlusion → 推測 TIMI 0');
+    } else if (/no\s*(antegrade\s*)?flow/i.test(text)) {
+        setOmiRadio('omi-timi', '0');
+        hints.push('報告描述 no flow → 推測 TIMI 0');
+    } else if (/slow\s*flow/i.test(text)) {
+        setOmiRadio('omi-timi', '2');
+        hints.push('報告描述 slow flow → 推測 TIMI 2');
+    } else {
+        hints.push('⚠ 未找到 TIMI flow 資訊，請手動選擇');
+    }
+
+    // --- STEMI → TnI 升高 ---
+    if (/STEMI|ST[\s\-]*segment\s*elevation|ST段上升|ST區段上升/i.test(text)) {
+        setOmiRadio('omi-tni', 'yes');
+        hints.push('診斷含 STEMI → TnI 自動設為升高');
+    } else if (/NSTEMI|non[\s\-]*ST/i.test(text)) {
+        setOmiRadio('omi-tni', 'yes');
+        hints.push('診斷含 NSTEMI → TnI 自動設為升高');
+    } else {
+        hints.push('⚠ 未偵測到 STEMI/NSTEMI，請手動填寫 TnI');
+    }
+
+    // --- 血管重建術 ---
     if (/Intervention[:\s]*Yes/i.test(text)) {
         setOmiRadio('omi-revasc', 'yes');
-        extracted = true;
+        hints.push('Intervention: Yes → 接受血管重建術');
+    } else if (/PTCA|PCI|stenting|thrombectomy|thrombus\s*aspiration/i.test(text)) {
+        setOmiRadio('omi-revasc', 'yes');
+        hints.push('報告含 PTCA/PCI 記錄 → 設為接受血管重建術');
+    } else {
+        hints.push('⚠ 未偵測到介入治療，請手動填寫');
     }
 
-    if (/100\s*%/.test(text)) {
+    // --- CTO（僅在明確提到 CTO 時才勾選）---
+    if (/\bCTO\b|chronic\s*total\s*occlusion|慢性全堵塞/i.test(text)) {
         setOmiRadio('omi-cto', 'yes');
         toggleCtoFields(true);
-        extracted = true;
+        hints.push('報告提及 CTO');
+    } else {
+        setOmiRadio('omi-cto', 'no');
     }
 
-    if (extracted) document.getElementById('omiExtractedBanner').classList.add('show');
+    // --- 顯示擷取日誌 ---
+    var banner = document.getElementById('omiExtractedBanner');
+    banner.innerHTML = '<strong>自動擷取結果：</strong><br>' + hints.map(function(h) {
+        var icon = h.charAt(0) === '⚠' ? '' : '✓ ';
+        return icon + h;
+    }).join('<br>');
+    banner.classList.add('show');
+
+    // --- 自動評估 ---
+    var timiSelected = document.querySelector('input[name="omi-timi"]:checked');
+    var tniSelected = document.querySelector('input[name="omi-tni"]:checked');
+    if (timiSelected && tniSelected) {
+        setTimeout(function() { runOmiEval(); }, 300);
+    }
 }
 
 function runOmiEval() {
