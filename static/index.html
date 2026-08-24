@@ -1255,20 +1255,30 @@ function setOmiRadio(name, value) {
 function parseOmiFromText(text) {
     var hints = [];
 
+    // 限定冠狀血管造影區段，避免從其他區域誤抓
+    var csMatch = text.match(/冠狀血管造影([\s\S]*?)(?=Diagnosis:|介入治療|冠狀動脈血管整形|Comments:|報告完成)/i);
+    var coronaryText = csMatch ? csMatch[1] : text;
+
     function findMaxStenosis(vesselName) {
         var nums = [];
-        var lines = text.split('\n');
+        var lines = coronaryText.split('\n');
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
             var vRegex = new RegExp('(?:^|\\s)' + vesselName + '[:\\s]', 'i');
             if (!vRegex.test(line)) continue;
-            var parts = line.split(/(?=LCX:|LAD:|RCA:|LM:|LMCA:)/i);
+            var parts = line.split(/(?=LCX:|LAD:|RCA:|LM(?:CA)?:)/i);
             for (var j = 0; j < parts.length; j++) {
                 var part = parts[j];
                 if (!new RegExp('^' + vesselName + '[:\\s]', 'i').test(part.trim())) continue;
                 var pctMatches = part.match(/(\d+)\s*%/g);
                 if (pctMatches) pctMatches.forEach(function(m) { nums.push(parseInt(m)); });
             }
+        }
+        // 備援：不分行搜尋冠狀區段
+        if (nums.length === 0) {
+            var fbRegex = new RegExp(vesselName + '[:\\s]+[A-Za-z0-9\\-\\s]*?(\\d+)\\s*%', 'gi');
+            var fm;
+            while ((fm = fbRegex.exec(coronaryText)) !== null) nums.push(parseInt(fm[1]));
         }
         return nums.length ? Math.max.apply(null, nums) : null;
     }
@@ -1286,22 +1296,22 @@ function parseOmiFromText(text) {
     var lmMax = findMaxStenosis('LM(?:CA)?');
     if (lmMax !== null) { document.getElementById('omi-lmca').value = lmMax; hints.push('LMCA 最大狹窄 ' + lmMax + '%'); }
 
-    // --- TIMI flow ---
+    // --- TIMI flow（支援 TIMI-2, TIMI flow 2, TIMI flow grade 2）---
     var hasTotal = (lcxMax === 100 || ladMax === 100 || rcaMax === 100);
-    var timiMatch = text.match(/TIMI[\s\-]*(\d)/i);
-    var timiRoman = text.match(/TIMI[\s\-]*(III|II|IV|I|0)/i);
+    var timiMatch = text.match(/TIMI[\s\-]*(?:flow\s*)?(?:grade\s*)?(\d)/i);
+    var timiRoman = text.match(/TIMI[\s\-]*(?:flow\s*)?(?:grade\s*)?(III|II|IV|I|0)/i);
 
     if (hasTotal) {
         setOmiRadio('omi-timi', '0');
         var occVessels = [];
-        if (lcxMax === 100) occVessels.push('LCX');
         if (ladMax === 100) occVessels.push('LAD');
+        if (lcxMax === 100) occVessels.push('LCX');
         if (rcaMax === 100) occVessels.push('RCA');
         hints.push(occVessels.join('/') + ' 100% 阻塞 → 術前 TIMI 0');
-        if (timiMatch) hints.push('（報告另記載術後 TIMI-' + timiMatch[1] + '，已採用術前 TIMI 0）');
+        if (timiMatch) hints.push('（報告另記載術後 TIMI ' + timiMatch[1] + '，已採用術前 TIMI 0）');
     } else if (timiMatch) {
         setOmiRadio('omi-timi', timiMatch[1]);
-        hints.push('報告記載 TIMI-' + timiMatch[1]);
+        hints.push('報告記載 TIMI ' + timiMatch[1]);
     } else if (timiRoman) {
         var romanMap = {'0':'0','I':'1','II':'2','III':'3','IV':'4'};
         var tv = romanMap[timiRoman[1]] || null;
@@ -1309,6 +1319,9 @@ function parseOmiFromText(text) {
     } else if (/total\s*occlusion|complete\s*occlusion|completely?\s*occluded/i.test(text)) {
         setOmiRadio('omi-timi', '0');
         hints.push('報告描述 total occlusion → 推測 TIMI 0');
+    } else if (/(?:GW|guidewire|wire)\s*(?:can\s*)?(?:not|unable)\s*(?:pass|cross|through)|unable\s*to\s*(?:cross|pass)/i.test(text)) {
+        setOmiRadio('omi-timi', '0');
+        hints.push('報告描述導絲無法通過病灶 → 推測 TIMI 0');
     } else if (/no\s*(antegrade\s*)?flow/i.test(text)) {
         setOmiRadio('omi-timi', '0');
         hints.push('報告描述 no flow → 推測 TIMI 0');
