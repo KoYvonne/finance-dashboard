@@ -921,6 +921,7 @@
             <label class="omi-radio-label"><input type="radio" name="omi-timi" value="1" onchange="updateOmiRadio(this)"> TIMI 1</label>
             <label class="omi-radio-label"><input type="radio" name="omi-timi" value="2" onchange="updateOmiRadio(this)"> TIMI 2</label>
             <label class="omi-radio-label"><input type="radio" name="omi-timi" value="3" onchange="updateOmiRadio(this)"> TIMI 3</label>
+            <label class="omi-radio-label"><input type="radio" name="omi-timi" value="na" onchange="updateOmiRadio(this)"> 未寫到</label>
         </div>
     </div>
 
@@ -1329,7 +1330,8 @@ function parseOmiFromText(text) {
         setOmiRadio('omi-timi', '2');
         hints.push('報告描述 slow flow → 推測 TIMI 2');
     } else {
-        hints.push('⚠ 未找到 TIMI flow 資訊，請手動選擇');
+        setOmiRadio('omi-timi', 'na');
+        hints.push('⚠ 未找到 TIMI flow 資訊，已設為「未寫到」，將以條件 2 評估');
     }
 
     // --- STEMI → TnI 升高 ---
@@ -1382,7 +1384,9 @@ function parseOmiFromText(text) {
 function runOmiEval() {
     var timiRadio = document.querySelector('input[name="omi-timi"]:checked');
     if (!timiRadio) { alert('請選擇 TIMI flow grade'); return; }
-    var timi = parseInt(timiRadio.value);
+    var timiVal = timiRadio.value;
+    var timiNA = (timiVal === 'na');
+    var timi = timiNA ? -1 : parseInt(timiVal);
 
     var tniRadio = document.querySelector('input[name="omi-tni"]:checked');
     var revascRadio = document.querySelector('input[name="omi-revasc"]:checked');
@@ -1400,12 +1404,16 @@ function runOmiEval() {
 
     var isOMI = false, criterion = '', details = [];
 
-    if (timi <= 1) {
+    if (!timiNA && timi <= 1) {
         isOMI = true;
         criterion = '1';
         details.push({ text: 'TIMI flow grade ' + timi + '（0–1）→ 直接符合 OMI 條件 1', pass: true });
     } else {
-        details.push({ text: 'TIMI flow grade ' + timi + '（2–3）→ 需進一步評估條件 2', pass: null });
+        if (timiNA) {
+            details.push({ text: 'TIMI flow grade：報告未寫到 → 無法判斷條件 1，改以條件 2 評估', pass: null });
+        } else {
+            details.push({ text: 'TIMI flow grade ' + timi + '（2–3）→ 需進一步評估條件 2', pass: null });
+        }
 
         if (!tniRadio) {
             details.push({ text: 'TnI：未填寫', pass: false });
