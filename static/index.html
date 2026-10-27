@@ -56,24 +56,6 @@
         .irb-header h2{font-size:1.3rem;color:#1a1a2e;font-weight:700;margin-bottom:6px}
         .irb-header p{font-size:.88rem;color:#888;line-height:1.6}
         .irb-badge{display:inline-block;background:#e3f2fd;color:#1565c0;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:12px;margin-bottom:12px}
-        .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px}
-        .type-card{background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:2px solid transparent;cursor:pointer;transition:all .25s;text-align:center;position:relative}
-        .type-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1);border-color:#90caf9}
-        .type-card.selected{border-color:#1565c0;background:#f5f9ff}
-        .type-card .type-icon{font-size:2.2rem;margin-bottom:12px}
-        .type-card .type-name{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:6px}
-        .type-card .type-desc{font-size:.78rem;color:#888;line-height:1.5}
-        .type-card .type-check{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:#1565c0;color:#fff;font-size:.8rem;display:none;align-items:center;justify-content:center}
-        .type-card.selected .type-check{display:flex}
-        .irb-next-area{text-align:center;margin-top:20px}
-        .irb-next-btn{padding:12px 40px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;opacity:.4;pointer-events:none}
-        .irb-next-btn.enabled{opacity:1;pointer-events:auto}
-        .irb-next-btn.enabled:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(15,52,96,.35)}
-        .irb-step2{display:none;margin-top:10px}
-        .irb-step2 h3{font-size:1.05rem;color:#1a1a2e;font-weight:700;margin-bottom:6px}
-        .irb-step2 p{font-size:.84rem;color:#888;margin-bottom:16px;line-height:1.5}
-        .irb-back-link{display:inline-block;margin-bottom:16px;color:#1565c0;font-size:.84rem;cursor:pointer;font-weight:500}
-        .irb-back-link:hover{text-decoration:underline}
         .upload-zone{border:2px dashed #c0c8d4;border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .25s;background:#fafbfc;position:relative}
         .upload-zone:hover{border-color:#1565c0;background:#f0f5ff}
         .upload-zone.dragover{border-color:#1565c0;background:#e8f0fe;transform:scale(1.01)}
@@ -92,35 +74,9 @@
         .file-text-preview{max-height:200px;overflow-y:auto;background:#f8f9fa;border-radius:8px;padding:14px;font-size:.8rem;color:#555;line-height:1.7;white-space:pre-wrap;word-break:break-word}
         .file-text-preview::-webkit-scrollbar{width:5px}
         .file-text-preview::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
-        .irb-coming-soon{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:18px 22px;margin-top:18px;text-align:center;color:#bf360c;font-size:.86rem;line-height:1.6}
-        .irb-generate-area{text-align:center;margin-top:20px}
-        .irb-generate-btn{padding:12px 40px;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:none}
-        .irb-generate-btn.visible{display:inline-block}
-        .irb-generate-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,71,161,.35)}
-        .irb-step3{display:none;margin-top:10px}
-        .form060-header{text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:3px double #1a1a2e}
-        .form060-header h2{font-size:1.15rem;color:#1a1a2e;margin-bottom:4px}
-        .form060-header .form060-subtitle{font-size:.78rem;color:#888}
-        .form060-section{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border-left:4px solid #1565c0}
-        .form060-section.boilerplate{border-left-color:#4caf50}
-        .form060-section-title{font-size:.88rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-        .form060-section-title .q-num{background:#e3f2fd;color:#1565c0;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:4px}
-        .form060-section-title .q-num.green{background:#e8f5e9;color:#2e7d32}
-        .form060-section-hint{font-size:.74rem;color:#999;margin-bottom:10px}
-        .form060-field{width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px 12px;font-size:.84rem;font-family:inherit;line-height:1.6;resize:vertical;transition:border-color .2s;color:#333;background:#fafbfc}
-        .form060-field:focus{outline:none;border-color:#1565c0;background:#fff}
-        .form060-field.short{max-width:300px}
-        .form060-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
-        .form060-label{font-size:.78rem;font-weight:600;color:#555;margin-bottom:4px}
-        .form060-group{margin-bottom:10px}
-        .form060-ref-panel{background:#f0f5ff;border:1px solid #bbdefb;border-radius:10px;padding:16px;margin-bottom:18px}
-        .form060-ref-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:.86rem;font-weight:600;color:#1565c0}
-        .form060-ref-content{max-height:200px;overflow-y:auto;margin-top:10px;font-size:.78rem;color:#555;line-height:1.7;white-space:pre-wrap;word-break:break-word;display:none}
         .form060-ref-content.open{display:block}
         .form060-actions{text-align:center;margin-top:24px;padding-top:18px;border-top:2px solid #e0e0e0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-        .form060-export-btn{padding:12px 36px;background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;border:none;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
-        .form060-export-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(27,94,32,.35)}
-        .form060-export-btn:disabled{opacity:.4;pointer-events:none}
+
         .form060-back-btn{padding:12px 36px;background:#fff;color:#555;border:2px solid #ccc;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
         .form060-back-btn:hover{border-color:#999;color:#333}
         .form060-autofill-tag{display:inline-block;font-size:.66rem;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:600}
@@ -210,7 +166,7 @@
     </div>
     <nav class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('finance',this)">金融市場</button>
-        <button class="tab-btn" onclick="switchTab('irb',this)">IRB</button>
+
         <button class="tab-btn" onclick="switchTab('flights',this)">機票優惠</button>
         <button class="tab-btn" onclick="switchTab('cards',this)">信用卡</button>
         <button class="tab-btn" onclick="switchTab('omi',this)">OMI 評估</button>
@@ -304,257 +260,6 @@
 </div>
 </div>
 
-<!-- ===== IRB Tab ===== -->
-<div class="tab-content" id="tab-irb">
-<div class="container">
-    <!-- Step 1: 選擇研究類型 -->
-    <div id="irb-step1">
-        <div class="irb-header">
-            <div class="irb-badge">北醫大 TMU-JIRB 專用</div>
-            <h2>IRB 新案申請輔助工具</h2>
-            <p>請先選擇您的研究案類型，系統會根據類型載入對應的 Form060 欄位</p>
-        </div>
-        <div class="type-grid">
-            <div class="type-card" onclick="selectIRBType('retrospective',this)">
-                <div class="type-check">✓</div>
-                <div class="type-icon">🏥</div>
-                <div class="type-name">病歷回溯</div>
-                <div class="type-desc">回顧性調閱醫療紀錄、病歷資料分析研究</div>
-            </div>
-            <div class="type-card" onclick="selectIRBType('database',this)">
-                <div class="type-check">✓</div>
-                <div class="type-icon">🗄️</div>
-                <div class="type-name">資料庫研究</div>
-                <div class="type-desc">使用健保資料庫、臨床研究資料庫、衛福部資科中心等</div>
-            </div>
-            <div class="type-card" onclick="selectIRBType('survey',this)">
-                <div class="type-check">✓</div>
-                <div class="type-icon">📋</div>
-                <div class="type-name">單純問卷研究</div>
-                <div class="type-desc">以問卷或量表為主要研究工具的調查研究</div>
-            </div>
-            <div class="type-card" onclick="selectIRBType('biobank',this)">
-                <div class="type-check">✓</div>
-                <div class="type-icon">🧬</div>
-                <div class="type-name">生物資料庫檢體研究</div>
-                <div class="type-desc">使用經衛福部查核通過之生物資料庫檢體</div>
-            </div>
-            <div class="type-card" onclick="selectIRBType('prospective',this)">
-                <div class="type-check">✓</div>
-                <div class="type-icon">🔬</div>
-                <div class="type-name">前瞻性研究</div>
-                <div class="type-desc">介入性臨床試驗、前瞻性觀察研究、隨機對照試驗(RCT)等</div>
-            </div>
-        </div>
-        <div class="irb-next-area">
-            <button class="irb-next-btn" id="irbNextBtn" onclick="goIRBStep2()">選好了，下一步</button>
-        </div>
-    </div>
-
-    <!-- Step 2: 貼上企畫書 -->
-    <div id="irb-step2" class="irb-step2">
-        <span class="irb-back-link" onclick="goIRBStep1()">← 重新選擇研究類型</span>
-        <div class="irb-header">
-            <div class="irb-badge" id="irb-type-badge">--</div>
-            <h3>上傳您的研究企畫書</h3>
-            <p>上傳計畫書檔案，系統將協助您對應到 Form060 的各個欄位</p>
-        </div>
-        <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fileInput" accept=".docx,.pdf,.txt,.doc">
-            <div class="upload-icon">📄</div>
-            <div class="upload-title">點擊上傳或拖曳檔案到這裡</div>
-            <div class="upload-hint">上傳您的研究企畫書，系統將讀取內容</div>
-            <div class="upload-formats">支援格式：.docx / .pdf / .txt</div>
-        </div>
-        <div class="file-preview" id="filePreview">
-            <div class="file-info">
-                <span class="file-icon" id="fileIcon">📄</span>
-                <div>
-                    <div class="file-name" id="fileName">--</div>
-                    <div class="file-size" id="fileSize">--</div>
-                </div>
-                <button class="file-remove" onclick="removeFile()">移除檔案</button>
-            </div>
-            <div class="file-text-preview" id="fileTextPreview">讀取中...</div>
-        </div>
-        <div class="irb-generate-area">
-            <button class="irb-generate-btn" id="irbGenerateBtn" onclick="goIRBStep3()">產生 IRB 表單 →</button>
-        </div>
-    </div>
-
-    <!-- Step 3: Form060 表單 -->
-    <div id="irb-step3" class="irb-step3">
-        <span class="irb-back-link" onclick="backToStep2()">← 返回上傳企畫書</span>
-        <div class="form060-header">
-            <div class="irb-badge">TMU-JIRB Form060</div>
-            <h2>人體試驗研究申請書</h2>
-            <div class="form060-subtitle">研究類型：<strong id="form060-type-label">--</strong></div>
-        </div>
-
-        <!-- 企畫書原文參考 -->
-        <div class="form060-ref-panel">
-            <div class="form060-ref-toggle" onclick="toggleRefPanel()">
-                📄 企畫書原文參考 <span id="refToggleIcon">▼</span>
-            </div>
-            <div class="form060-ref-content" id="refContent"></div>
-        </div>
-
-        <!-- 計畫基本資料 -->
-        <div class="form060-section">
-            <div class="form060-section-title">計畫基本資料</div>
-            <div class="form060-group">
-                <div class="form060-label">計畫名稱（中文）</div>
-                <input type="text" class="form060-field" id="f060-title-zh" placeholder="例：深度學習於居家心電圖之智慧監測與分析系統">
-            </div>
-            <div class="form060-group">
-                <div class="form060-label">計畫名稱（英文）</div>
-                <input type="text" class="form060-field" id="f060-title-en" placeholder="例：Deep Learning for Smart Monitoring of Home ECG">
-            </div>
-        </div>
-
-        <!-- 主持人資訊 -->
-        <div class="form060-section">
-            <div class="form060-section-title">計畫主持人</div>
-            <div class="form060-row">
-                <div class="form060-group">
-                    <div class="form060-label">中文姓名</div>
-                    <input type="text" class="form060-field short" id="f060-pi-name" placeholder="例：王大明">
-                </div>
-                <div class="form060-group">
-                    <div class="form060-label">英文姓名</div>
-                    <input type="text" class="form060-field short" id="f060-pi-name-en" placeholder="例：Da-Ming, Wang">
-                </div>
-            </div>
-            <div class="form060-row">
-                <div class="form060-group">
-                    <div class="form060-label">服務單位/科別</div>
-                    <input type="text" class="form060-field short" id="f060-pi-dept" placeholder="例：臺北醫學大學 資訊醫學研究所">
-                </div>
-                <div class="form060-group">
-                    <div class="form060-label">職稱</div>
-                    <input type="text" class="form060-field short" id="f060-pi-title" placeholder="例：教授/主治醫師">
-                </div>
-            </div>
-            <div class="form060-row">
-                <div class="form060-group">
-                    <div class="form060-label">聯絡電話</div>
-                    <input type="text" class="form060-field short" id="f060-pi-phone" placeholder="例：02-27372181">
-                </div>
-                <div class="form060-group">
-                    <div class="form060-label">電子信箱</div>
-                    <input type="text" class="form060-field short" id="f060-pi-email" placeholder="例：name@tmu.edu.tw">
-                </div>
-            </div>
-        </div>
-
-        <!-- Q1: 研究背景 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q1</span> 研究計畫簡介</div>
-            <div class="form060-section-hint">請簡述研究背景、目的與重要性</div>
-            <textarea class="form060-field" id="f060-q1" rows="6" placeholder="從企畫書中擷取研究背景..."></textarea>
-        </div>
-
-        <!-- Q2: 研究摘要 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q2</span> 研究計畫摘要</div>
-            <div class="form060-section-hint">簡述研究方法、預期成果</div>
-            <textarea class="form060-field" id="f060-q2" rows="4" placeholder="從企畫書中擷取摘要..."></textarea>
-        </div>
-
-        <!-- Q3: 執行時間 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q3</span> 預定執行時間</div>
-            <div class="form060-row">
-                <div class="form060-group">
-                    <div class="form060-label">起始日期</div>
-                    <input type="text" class="form060-field short" id="f060-q3-start" placeholder="例：自審查通過日起">
-                </div>
-                <div class="form060-group">
-                    <div class="form060-label">結束日期</div>
-                    <input type="text" class="form060-field short" id="f060-q3-end" placeholder="例：2027-01-01">
-                </div>
-            </div>
-        </div>
-
-        <!-- Q12: 計畫類型 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q12</span> 計畫分類<span class="form060-autofill-tag">自動帶入</span></div>
-            <input type="text" class="form060-field short" id="f060-q12" readonly style="background:#e8f5e9;font-weight:600">
-        </div>
-
-        <!-- Q18: 執行地點 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q18</span> 計畫執行地點</div>
-            <input type="text" class="form060-field" id="f060-q18" placeholder="例：臺北醫學大學 資訊研究所">
-        </div>
-
-        <!-- Q27: 研究方法 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q27</span> 研究方法</div>
-            <div class="form060-section-hint">詳述研究設計、資料收集與分析方法</div>
-            <textarea class="form060-field" id="f060-q27" rows="6" placeholder="從企畫書中擷取研究方法..."></textarea>
-        </div>
-
-        <!-- Q28: 研究領域 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q28</span> 研究領域</div>
-            <input type="text" class="form060-field" id="f060-q28" placeholder="例：Cardiology, General Medicine">
-        </div>
-
-        <!-- Q29: 受試者資訊 -->
-        <div class="form060-section">
-            <div class="form060-section-title"><span class="q-num">Q29</span> 受試者(合作對象)資訊</div>
-            <div class="form060-group">
-                <div class="form060-label">Q29(1) 預定收案人數</div>
-                <input type="text" class="form060-field short" id="f060-q29-n" placeholder="例：500 人">
-            </div>
-            <div class="form060-row">
-                <div class="form060-group">
-                    <div class="form060-label">Q29(2) 年齡範圍 — 最小</div>
-                    <input type="text" class="form060-field short" id="f060-q29-age-min" placeholder="例：18">
-                </div>
-                <div class="form060-group">
-                    <div class="form060-label">Q29(2) 年齡範圍 — 最大</div>
-                    <input type="text" class="form060-field short" id="f060-q29-age-max" placeholder="例：100">
-                </div>
-            </div>
-            <div class="form060-group">
-                <div class="form060-label">Q29(3) 納入條件 (Inclusion Criteria)</div>
-                <textarea class="form060-field" id="f060-q29-inc" rows="3" placeholder="從企畫書中擷取納入條件..."></textarea>
-            </div>
-            <div class="form060-group">
-                <div class="form060-label">Q29(3) 排除條件 (Exclusion Criteria)</div>
-                <textarea class="form060-field" id="f060-q29-exc" rows="3" placeholder="從企畫書中擷取排除條件..."></textarea>
-            </div>
-        </div>
-
-        <!-- Q30: 資料隱私保護 (Boilerplate) -->
-        <div class="form060-section boilerplate">
-            <div class="form060-section-title"><span class="q-num green">Q30</span> 受試者資料隱私之保護措施<span class="form060-autofill-tag">範本自動帶入</span></div>
-            <div class="form060-section-hint">以下為北醫大標準範本，可依需求修改</div>
-            <textarea class="form060-field" id="f060-q30" rows="10"></textarea>
-        </div>
-
-        <!-- Q31: 知情同意 -->
-        <div class="form060-section boilerplate">
-            <div class="form060-section-title"><span class="q-num green">Q31</span> 受試者知情同意<span class="form060-autofill-tag">範本自動帶入</span></div>
-            <textarea class="form060-field" id="f060-q31" rows="4"></textarea>
-        </div>
-
-        <!-- Q32: 同意書 -->
-        <div class="form060-section boilerplate">
-            <div class="form060-section-title"><span class="q-num green">Q32</span> 知情同意書<span class="form060-autofill-tag">範本自動帶入</span></div>
-            <textarea class="form060-field" id="f060-q32" rows="4"></textarea>
-        </div>
-
-        <!-- 操作按鈕 -->
-        <div class="form060-actions">
-            <button class="form060-back-btn" onclick="backToStep2()">← 返回修改</button>
-            <button class="form060-export-btn" onclick="exportIRB()">匯出 IRB 申請書</button>
-        </div>
-    </div>
-</div>
-</div>
 
 <!-- ===== 機票優惠 Tab ===== -->
 <div class="tab-content" id="tab-flights">
@@ -696,7 +401,7 @@
     </div>
 
     <div class="promo-note">
-        💡 小提示：用台新 FLYGO 卡刷機票有海外消費回饋，富邦 LINE PAY 卡有指定通路加碼！
+        💡 小提示：用台新 Richart 卡（玩旅刷）刷機票有海外消費回饋，富邦 J 卡有指定通路加碼！
     </div>
 </div>
 </div>
@@ -706,7 +411,58 @@
 <div class="container">
     <div class="promo-header">
         <h2>💳 我的信用卡攻略</h2>
-        <p>什麼場景該刷哪張卡？幫你整理好了 <span style="font-size:.72rem;color:#aaa">更新：2026/06</span></p>
+        <p>什麼場景該刷哪張卡？記得切換 Richart 方案！ <span style="font-size:.72rem;color:#aaa">更新：2026/10</span></p>
+    </div>
+
+    <!-- Richart 卡切換方案說明 -->
+    <div style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px solid #ef9a9a;border-radius:12px;padding:16px 18px;margin-bottom:16px">
+        <div style="font-size:.95rem;font-weight:700;color:#c62828;margin-bottom:8px">🔄 台新 Richart 卡（原 FlyGo）切換方案一覽</div>
+        <p style="font-size:.78rem;color:#666;margin-bottom:10px;line-height:1.6">原 FlyGo 已整併為 Richart 卡，可在 Richart APP 自由切換 7+1 種方案，<strong>以當天最後一次切換為準</strong>。需設定數位帳單 + Richart 帳戶自扣才享加碼回饋，否則一律 0.3%。回饋以台新 Point 發放。</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">📱</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">Pay 著刷</div>
+                <div style="font-size:.7rem;color:#888">台新Pay/LINE Pay<br>最高 <strong>3.8%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">🏪</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">天天刷</div>
+                <div style="font-size:.7rem;color:#888">超商/藥妝/加油<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">🛍️</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">大筆刷</div>
+                <div style="font-size:.7rem;color:#888">百貨/量販<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">🍽️</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">好饗刷</div>
+                <div style="font-size:.7rem;color:#888">餐飲/KTV<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">🛒</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">數趣刷</div>
+                <div style="font-size:.7rem;color:#888">網購/影音/AI/遊戲<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">✈️</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">玩旅刷</div>
+                <div style="font-size:.7rem;color:#888">航空/旅遊/海外<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">🎉</div>
+                <div style="font-size:.76rem;font-weight:700;color:#c62828">假日刷</div>
+                <div style="font-size:.7rem;color:#888">週末/國定假日<br>最高 <strong>3.3%</strong></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+                <div style="font-size:1.1rem;margin-bottom:2px">😌</div>
+                <div style="font-size:.76rem;font-weight:700;color:#999">Chill 刷</div>
+                <div style="font-size:.7rem;color:#888">基本 0.3%<br>不需切換</div>
+            </div>
+        </div>
+        <div style="margin-top:10px;font-size:.72rem;color:#bf360c;background:#fff3e0;padding:6px 10px;border-radius:6px;line-height:1.5">
+            ⚠️ 除了 Pay 著刷（LINE Pay）和假日刷外，其他方案透過第三方支付（街口、全支付等）消費不認列回饋
+        </div>
     </div>
 
     <!-- 出國旅遊 -->
@@ -717,13 +473,13 @@
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div style="background:#fff5f5;border-radius:8px;padding:12px">
-                <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：台新 FLYGO</div>
+                <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（玩旅刷）</div>
                 <ul class="cc-benefits" style="margin:0">
                     <li>海外消費 <strong>3% 回饋無上限</strong></li>
-                    <li>航空/旅遊平台（Klook、KKday、Agoda、Booking 等）<strong>3.3%</strong></li>
+                    <li>航空（華航/長榮/虎航/星宇）、Klook、東南旅遊 <strong>3.3%</strong></li>
                     <li>機場接送、貴賓室、旅平險</li>
                 </ul>
-                <div style="font-size:.72rem;color:#999;margin-top:6px">需設定電子帳單 + Richart 自扣</div>
+                <div style="font-size:.72rem;color:#999;margin-top:6px">出國前切到「玩旅刷」</div>
             </div>
             <div style="background:#f0fff0;border-radius:8px;padding:12px">
                 <div style="font-weight:700;color:#2e7d32;font-size:.82rem;margin-bottom:6px">🥈 日韓泰：富邦 J 卡</div>
@@ -735,7 +491,7 @@
             </div>
         </div>
         <div style="margin-top:10px;font-size:.8rem;color:#555;background:#f8f8f8;padding:8px 12px;border-radius:6px">
-            💡 <strong>出國結論</strong>：去日韓泰刷<strong style="color:#2e7d32">富邦J卡</strong>最高6%，其他國家刷<strong style="color:#c62828">台新FLYGO</strong> 3%最划算
+            💡 <strong>出國結論</strong>：去日韓泰刷<strong style="color:#2e7d32">富邦J卡</strong>最高6%，其他國家切<strong style="color:#c62828">玩旅刷</strong> 3%最划算
         </div>
     </div>
 
@@ -743,59 +499,108 @@
     <div class="cc-card taishin" style="margin-bottom:14px">
         <div class="cc-card-head">
             <div class="cc-card-icon">🛒</div>
-            <div><div class="cc-card-name">網購</div></div>
+            <div><div class="cc-card-name">網購 / 影音串流 / AI 訂閱</div></div>
         </div>
         <div style="background:#fff5f5;border-radius:8px;padding:12px">
-            <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：台新 FLYGO</div>
+            <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（數趣刷）</div>
             <ul class="cc-benefits" style="margin:0">
-                <li>蝦皮、momo、PChome、Amazon、東森、博客來 <strong>3.3% 回饋</strong></li>
-                <li>淘寶、iHerb、SHEIN、Olive Young 等海外網購也算 <strong>3.3%</strong></li>
-                <li>酷澎 Coupang 也適用</li>
+                <li>蝦皮、momo、PChome、Amazon、博客來 <strong>3.3%</strong></li>
+                <li>Netflix、Spotify、YouTube Premium、Disney+ <strong>3.3%</strong></li>
+                <li>ChatGPT、Claude 等 AI 訂閱 <strong>3.3%</strong></li>
+                <li>遊戲（Steam、PS Store、Nintendo）<strong>3.3%</strong></li>
             </ul>
+            <div style="font-size:.72rem;color:#999;margin-top:6px">加碼上限 2,000 Point/月</div>
         </div>
         <div style="margin-top:10px;font-size:.8rem;color:#555;background:#f8f8f8;padding:8px 12px;border-radius:6px">
-            💡 <strong>網購結論</strong>：不管國內外網購，通通刷<strong style="color:#c62828">台新FLYGO</strong>就對了
+            💡 <strong>網購結論</strong>：切到<strong style="color:#c62828">數趣刷</strong>，國內外網購、串流、AI 通通 3.3%
         </div>
     </div>
 
-    <!-- LINE Pay / 行動支付 -->
-    <div class="cc-card fubon" style="margin-bottom:14px">
+    <!-- 行動支付 -->
+    <div class="cc-card taishin" style="margin-bottom:14px">
         <div class="cc-card-head">
             <div class="cc-card-icon">📱</div>
-            <div><div class="cc-card-name">LINE Pay / 行動支付</div></div>
+            <div><div class="cc-card-name">行動支付（LINE Pay / 台新 Pay）</div></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div style="background:#f0fff0;border-radius:8px;padding:12px">
-                <div style="font-weight:700;color:#00c300;font-size:.82rem;margin-bottom:6px">🏆 首選：富邦 J 卡</div>
+            <div style="background:#fff5f5;border-radius:8px;padding:12px">
+                <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（Pay 著刷）</div>
                 <ul class="cc-benefits" style="margin:0">
-                    <li>LINE Pay 綁定消費享 <strong>LINE Points 回饋</strong></li>
-                    <li>國內消費基本 <strong>1%</strong></li>
-                    <li>指定通路（超商、餐飲）加碼</li>
+                    <li>台新 Pay 綁定 <strong>最高 3.8%</strong></li>
+                    <li>LINE Pay 綁定 <strong>最高 2.3%</strong></li>
+                    <li>全盈+Pay <strong>最高 2.3%</strong></li>
                 </ul>
+                <div style="font-size:.72rem;color:#999;margin-top:6px">所有方案中回饋率最高的</div>
             </div>
             <div style="background:#f5f0ff;border-radius:8px;padding:12px">
-                <div style="font-weight:700;color:#6a1b9a;font-size:.82rem;margin-bottom:6px">新戶推：王道卡</div>
+                <div style="font-weight:700;color:#6a1b9a;font-size:.82rem;margin-bottom:6px">備選：王道卡</div>
                 <ul class="cc-benefits" style="margin:0">
-                    <li>新戶行動支付 <strong>最高 8.8%</strong>（核卡 60 天內）</li>
                     <li>一卡通自動加值 <strong>最高 10%</strong></li>
+                    <li>國內外一般消費 <strong>1% 無上限</strong></li>
                 </ul>
                 <div style="font-size:.72rem;color:#999;margin-top:6px">限交通減碳卡方案</div>
             </div>
         </div>
     </div>
 
-    <!-- 好市多 / 加油 -->
+    <!-- 日常消費：超商/餐飲/藥妝 -->
+    <div class="cc-card taishin" style="margin-bottom:14px">
+        <div class="cc-card-head">
+            <div class="cc-card-icon">🏪</div>
+            <div><div class="cc-card-name">超商 / 藥妝 / 加油</div></div>
+        </div>
+        <div style="background:#fff5f5;border-radius:8px;padding:12px">
+            <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（天天刷）</div>
+            <ul class="cc-benefits" style="margin:0">
+                <li>超商（7-11、全家、萊爾富）<strong>3.3%</strong></li>
+                <li>藥妝藥局（屈臣氏、康是美、大樹）<strong>3.3%</strong></li>
+                <li>加油站 <strong>3.3%</strong></li>
+            </ul>
+            <div style="font-size:.72rem;color:#999;margin-top:6px">日常通勤消費的好選擇</div>
+        </div>
+    </div>
+
+    <!-- 餐飲 -->
+    <div class="cc-card taishin" style="margin-bottom:14px">
+        <div class="cc-card-head">
+            <div class="cc-card-icon">🍽️</div>
+            <div><div class="cc-card-name">餐飲 / KTV</div></div>
+        </div>
+        <div style="background:#fff5f5;border-radius:8px;padding:12px">
+            <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（好饗刷）</div>
+            <ul class="cc-benefits" style="margin:0">
+                <li>餐廳、咖啡廳、外送平台 <strong>3.3%</strong></li>
+                <li>KTV（錢櫃、好樂迪等）<strong>3.3%</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 百貨 / 量販 -->
+    <div class="cc-card taishin" style="margin-bottom:14px">
+        <div class="cc-card-head">
+            <div class="cc-card-icon">🏬</div>
+            <div><div class="cc-card-name">百貨 / 量販</div></div>
+        </div>
+        <div style="background:#fff5f5;border-radius:8px;padding:12px">
+            <div style="font-weight:700;color:#c62828;font-size:.82rem;margin-bottom:6px">🏆 首選：Richart 卡（大筆刷）</div>
+            <ul class="cc-benefits" style="margin:0">
+                <li>新光三越、SOGO、微風、遠百等百貨 <strong>3.3%</strong></li>
+                <li>家樂福、全聯、大潤發等量販 <strong>3.3%</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 好市多 -->
     <div class="cc-card costco" style="margin-bottom:14px">
         <div class="cc-card-head">
             <div class="cc-card-icon">🛍️</div>
-            <div><div class="cc-card-name">好市多 / 加油</div></div>
+            <div><div class="cc-card-name">好市多 Costco</div></div>
         </div>
         <div style="background:#fff8f0;border-radius:8px;padding:12px">
             <div style="font-weight:700;color:#e65100;font-size:.82rem;margin-bottom:6px">🏆 首選：Costco 聯名卡</div>
             <ul class="cc-benefits" style="margin:0">
                 <li>好市多賣場消費 <strong>1% 多利金</strong></li>
                 <li>Costco 加油站 <strong>3% 多利金</strong></li>
-                <li>中油直營站加油 <strong>0.5% + 登錄再 0.5%</strong>（每月上限 $300）</li>
             </ul>
         </div>
     </div>
@@ -816,56 +621,44 @@
         </div>
     </div>
 
-    <!-- 日常消費 -->
-    <div class="cc-card obank" style="margin-bottom:14px">
-        <div class="cc-card-head">
-            <div class="cc-card-icon">☕</div>
-            <div><div class="cc-card-name">日常消費 / 其他</div></div>
-        </div>
-        <div style="background:#f8f8f8;border-radius:8px;padding:12px">
-            <ul class="cc-benefits" style="margin:0">
-                <li><strong>王道卡</strong> — 國內外 1% 回饋無上限，搭配高利活儲最划算</li>
-                <li><strong>富邦 J 卡</strong> — 國內 1%，超商餐飲有加碼</li>
-                <li><strong>台新 FLYGO</strong> — 國內一般消費僅 0.3%，不建議用於國內實體店</li>
-            </ul>
-        </div>
-    </div>
-
     <!-- 速查總表 -->
     <div class="flight-search" style="border-left:4px solid #1565c0">
-        <h3>📊 一張圖看懂：該刷哪張卡</h3>
+        <h3>📊 一張圖看懂：該切什麼方案、刷哪張卡</h3>
         <table style="width:100%;border-collapse:collapse;font-size:.82rem;margin-top:10px">
             <thead>
                 <tr style="background:#e3f2fd">
                     <th style="padding:8px;text-align:left;border-bottom:2px solid #90caf9">場景</th>
-                    <th style="padding:8px;text-align:left;border-bottom:2px solid #90caf9">刷這張</th>
+                    <th style="padding:8px;text-align:left;border-bottom:2px solid #90caf9">刷這張 / 切這模式</th>
                     <th style="padding:8px;text-align:right;border-bottom:2px solid #90caf9">回饋</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">✈️ 海外消費（非日韓泰）</td><td style="padding:7px 8px;font-weight:700;color:#c62828">台新 FLYGO</td><td style="padding:7px 8px;text-align:right;font-weight:700">3%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">✈️ 海外消費（非日韓泰）</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 玩旅刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3%</td></tr>
                 <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🇯🇵🇰🇷🇹🇭 日韓泰消費</td><td style="padding:7px 8px;font-weight:700;color:#2e7d32">富邦 J 卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">最高 6%</td></tr>
                 <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">🚃 日本交通卡儲值</td><td style="padding:7px 8px;font-weight:700;color:#2e7d32">富邦 J 卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">最高 10%</td></tr>
-                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🛒 網購（蝦皮/momo/Amazon...）</td><td style="padding:7px 8px;font-weight:700;color:#c62828">台新 FLYGO</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
-                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">📱 LINE Pay</td><td style="padding:7px 8px;font-weight:700;color:#00c300">富邦 J 卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">1%+</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🛒 網購/串流/AI/遊戲</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 數趣刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">📱 台新Pay / LINE Pay</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart Pay著刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">最高 3.8%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🏪 超商/藥妝/加油</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 天天刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">🍽️ 餐飲 / KTV</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 好饗刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🏬 百貨 / 量販</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 大筆刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">🎉 週末/假日消費</td><td style="padding:7px 8px;font-weight:700;color:#c62828">Richart 假日刷</td><td style="padding:7px 8px;text-align:right;font-weight:700">3.3%</td></tr>
                 <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🛍️ 好市多</td><td style="padding:7px 8px;font-weight:700;color:#e65100">Costco 聯名卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">1%</td></tr>
-                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">⛽ 加油（Costco 站）</td><td style="padding:7px 8px;font-weight:700;color:#e65100">Costco 聯名卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">3%</td></tr>
-                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa"><td style="padding:7px 8px">🚄 台鐵 / 高鐵</td><td style="padding:7px 8px;font-weight:700;color:#6a1b9a">王道減碳卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">6%</td></tr>
-                <tr><td style="padding:7px 8px">☕ 日常消費</td><td style="padding:7px 8px;font-weight:700;color:#6a1b9a">王道卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">1%</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0"><td style="padding:7px 8px">🚄 台鐵 / 高鐵</td><td style="padding:7px 8px;font-weight:700;color:#6a1b9a">王道減碳卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">6%</td></tr>
+                <tr><td style="padding:7px 8px">☕ 其他日常消費</td><td style="padding:7px 8px;font-weight:700;color:#6a1b9a">王道卡</td><td style="padding:7px 8px;text-align:right;font-weight:700">1%</td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- 各銀行連結 -->
     <div class="flight-sites" style="margin-top:16px;justify-content:center">
-        <a class="flight-site-btn" href="https://www.taishinbank.com.tw/TSB/personal/credit-card/overview/flygo/" target="_blank" rel="noopener">🔴 台新FLYGO</a>
+        <a class="flight-site-btn" href="https://www.taishinbank.com.tw/TSB/personal/credit/intro/overview/future/6e39b736-d735-11f0-b50f-0050568c09e3" target="_blank" rel="noopener">🔴 台新Richart卡</a>
         <a class="flight-site-btn" href="https://www.fubon.com/banking/personal/credit_card/" target="_blank" rel="noopener">🟢 富邦J卡</a>
         <a class="flight-site-btn" href="https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/costco/" target="_blank" rel="noopener">🟠 Costco聯名</a>
         <a class="flight-site-btn" href="https://www.o-bank.com/" target="_blank" rel="noopener">🟣 王道銀行</a>
     </div>
 
     <div class="promo-note">
-        ⚠️ 回饋比例可能隨銀行公告調整，部分活動需登錄或有上限，請以各銀行官網公告為準
+        ⚠️ 回饋比例可能隨銀行公告調整，加碼方案有上限（2,000 Point/月），請以各銀行官網公告為準
     </div>
 </div>
 </div>
@@ -1004,9 +797,8 @@ function switchTab(tabId, btn) {
 }
 window.switchTab = switchTab;
 
-// ── IRB 功能 ──
-var selectedIRBType = null;
-var IRB_LABELS = {
+// ── OMI 評估功能（IRB 功能已移除）──
+/* IRB removed - start
     retrospective: '病歷回溯',
     database: '資料庫研究',
     survey: '單純問卷研究',
@@ -1196,7 +988,7 @@ function populateForm060() {
 function exportIRB() {
     alert('匯出功能開發中！完成後將可匯出為 Word (.docx) 格式。');
 }
-window.exportIRB = exportIRB;
+IRB removed - end */
 
 // ── OMI 評估功能 ──
 function updateOmiRadio(el) {
